@@ -1,0 +1,1207 @@
+/* ============================================
+   CSS VARIABLES
+============================================ */
+:root {
+    --color-bg-primary: #0a1744;
+    --color-bg-secondary: #0d1b4c;
+    --color-module-bg: #1a3a8f;
+    --color-module-hover: #2548a8;
+    --color-accent-red: #dc2626;
+    --color-accent-orange: #f59e0b;
+    --color-gold: #c9a227;
+    --color-text-white: #ffffff;
+    --color-text-light: #e2e8f0;
+    --color-calendar-bg: #f8fafc;
+    --color-success: #10b981;
+    --sidebar-width: 80px;
+    --header-height: 80px;
+    --border-radius-sm: 8px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 20px;
+    --border-radius-xl: 30px;
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+}
+
+/* ============================================
+   RESET & BASE
+============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-white);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+============================================ */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(201, 162, 39, 0.4);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(201, 162, 39, 0.7);
+}
+
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(201, 162, 39, 0.4) rgba(255, 255, 255, 0.05);
+}
+
+/* ============================================
+   HEADER
+============================================ */
+.header {
+    height: var(--header-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 20px;
+    background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+}
+
+.logo-container {
+    width: 60px;
+    height: 60px;
+    border: 3px solid var(--color-text-white);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: var(--color-bg-secondary);
+}
+
+.logo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1e3a5f 0%, #0d1b4c 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--color-text-light);
+}
+
+/* ============================================
+   MAIN LAYOUT
+============================================ */
+.main-container {
+    display: flex;
+    min-height: calc(100vh - var(--header-height));
+    padding: 20px;
+    gap: 20px;
+}
+
+/* ============================================
+   SIDEBAR
+============================================ */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--color-module-bg);
+    border-radius: var(--border-radius-xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 0;
+    flex-shrink: 0;
+}
+
+.sidebar-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    border-radius: var(--border-radius-sm);
+}
+
+.sidebar-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: var(--color-text-white);
+}
+
+/* ============================================
+   CONTENT AREA
+============================================ */
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    min-width: 0;
+}
+
+/* ============================================
+   BANNER / HERO SECTION
+============================================ */
+.banner {
+    background: linear-gradient(135deg, var(--color-module-bg) 0%, #2563eb 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+}
+
+.banner-content {
+    flex: 1;
+    z-index: 2;
+}
+
+.banner-title {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 600;
+    font-style: italic;
+    line-height: 1.2;
+    max-width: 400px;
+}
+
+.banner-image {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    max-width: 500px;
+}
+
+.banner-image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.8) 0%, rgba(59, 130, 246, 0.6) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 20px;
+    clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.banner-dots {
+    display: flex;
+    gap: 8px;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+}
+
+.banner-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.banner-dot.active,
+.banner-dot:hover {
+    background-color: var(--color-text-white);
+}
+
+/* ============================================
+   MODULES GRID & CALENDAR CONTAINER
+============================================ */
+.bottom-section {
+    display: flex;
+    gap: 25px;
+    flex: 1;
+}
+
+/* ============================================
+   MODULES GRID
+============================================ */
+.modules-container {
+    flex: 1;
+    min-width: 0;
+}
+
+.modules-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 15px;
+}
+
+.module-card {
+    background-color: var(--color-module-bg);
+    border-radius: var(--border-radius-md);
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    text-decoration: none;
+    color: var(--color-text-white);
+    border: none;
+    font-family: inherit;
+}
+
+.module-card:hover {
+    background-color: var(--color-module-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.module-card.highlight-red {
+    background-color: var(--color-accent-red);
+}
+
+.module-card.highlight-red:hover {
+    background-color: #b91c1c;
+}
+
+.module-card.highlight-orange {
+    background-color: var(--color-accent-orange);
+}
+
+.module-card.highlight-orange:hover {
+    background-color: #d97706;
+}
+
+.module-icon {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.module-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: var(--color-gold);
+}
+
+.module-card.highlight-red .module-icon svg,
+.module-card.highlight-orange .module-icon svg {
+    fill: var(--color-text-white);
+}
+
+.module-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.3;
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+/* ============================================
+   CALENDAR & NEWS SECTION
+============================================ */
+.calendar-news-section {
+    width: 320px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.calendar-container {
+    width: 100%;
+}
+
+.calendar {
+    background-color: var(--color-calendar-bg);
+    border-radius: var(--border-radius-lg);
+    padding: 25px;
+    color: #1e293b;
+}
+
+.calendar-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.calendar-month {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.calendar-weekday {
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: #475569;
+    padding: 8px 0;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day {
+    text-align: center;
+    padding: 10px 5px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #334155;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    position: relative;
+}
+
+.calendar-day:hover:not(.empty) {
+    background-color: #e2e8f0;
+}
+
+.calendar-day.today {
+    background-color: var(--color-gold);
+    color: white;
+}
+
+.calendar-day.empty {
+    visibility: hidden;
+}
+
+.calendar-day.has-event {
+    font-weight: 700;
+}
+
+.calendar-day.has-event::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: var(--color-accent-red);
+    border-radius: 50%;
+}
+
+.calendar-day.today.has-event::after {
+    background-color: white;
+}
+
+/* ============================================
+   NEWS TICKER / CINTILLO DE NOTICIAS
+============================================ */
+.news-ticker-container {
+    background: linear-gradient(135deg, var(--color-module-bg) 0%, #2563eb 100%);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    position: relative;
+}
+
+.news-ticker-header {
+    background-color: var(--color-accent-red);
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.news-ticker-header svg {
+    width: 18px;
+    height: 18px;
+    fill: white;
+}
+
+.news-ticker-header span {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.news-ticker-wrapper {
+    overflow: hidden;
+    position: relative;
+    height: 45px;
+    display: flex;
+    align-items: center;
+}
+
+.news-ticker-track {
+    display: flex;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+}
+
+.news-ticker-track:hover {
+    animation-play-state: paused;
+}
+
+.news-item {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 40px;
+    font-size: 13px;
+    color: var(--color-text-light);
+}
+
+.news-item::before {
+    content: '•';
+    margin-right: 15px;
+    color: var(--color-gold);
+    font-size: 18px;
+}
+
+@keyframes ticker {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* ============================================
+   MODAL BASE STYLES
+============================================ */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(10, 23, 68, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--border-radius-lg);
+    width: 100%;
+    max-width: 700px;
+    max-height: 85vh;
+    overflow: hidden;
+    transform: scale(0.9) translateY(20px);
+    transition: transform var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-overlay.active .modal {
+    transform: scale(1) translateY(0);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--color-module-bg) 0%, #2563eb 100%);
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.modal-title-icon {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: var(--border-radius-sm);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-title-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--color-gold);
+}
+
+.modal-close {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition-fast);
+}
+
+.modal-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.modal-close svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-text-white);
+}
+
+.modal-body {
+    padding: 25px 30px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* ============================================
+   CONTACTS MODAL - SEARCH
+============================================ */
+.contacts-search {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.contacts-search input {
+    width: 100%;
+    padding: 15px 20px 15px 50px;
+    background-color: var(--color-module-bg);
+    border: 2px solid transparent;
+    border-radius: var(--border-radius-md);
+    color: var(--color-text-white);
+    font-family: inherit;
+    font-size: 14px;
+    transition: var(--transition-fast);
+}
+
+.contacts-search input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.contacts-search input:focus {
+    outline: none;
+    border-color: var(--color-gold);
+}
+
+.contacts-search svg {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    fill: rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================
+   CONTACTS LIST
+============================================ */
+.contacts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 450px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.contact-card {
+    background-color: var(--color-module-bg);
+    border-radius: var(--border-radius-md);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    transition: var(--transition-fast);
+}
+
+.contact-card:hover {
+    background-color: var(--color-module-hover);
+}
+
+.contact-avatar {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: white;
+    overflow: hidden;
+}
+
+.contact-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.contact-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.contact-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.contact-department-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+}
+
+.contact-department {
+    font-size: 13px;
+    color: var(--color-gold);
+}
+
+.contact-email-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.contact-email {
+    font-size: 12px;
+    color: var(--color-text-light);
+    opacity: 0.8;
+}
+
+.copy-email-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    position: relative;
+}
+
+.copy-email-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.copy-email-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: var(--color-text-light);
+    transition: var(--transition-fast);
+}
+
+.copy-email-btn:hover svg {
+    fill: var(--color-gold);
+}
+
+.copy-email-btn.copied svg {
+    fill: var(--color-success);
+}
+
+/* Copy tooltip */
+.copy-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-5px);
+    background-color: var(--color-success);
+    color: white;
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-fast);
+    pointer-events: none;
+}
+
+.copy-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--color-success);
+}
+
+.copy-email-btn.copied .copy-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-8px);
+}
+
+.contact-phone {
+    font-size: 13px;
+    color: var(--color-text-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.contact-phone svg {
+    width: 14px;
+    height: 14px;
+    fill: var(--color-text-light);
+}
+
+.contact-extension {
+    background-color: rgba(201, 162, 39, 0.2);
+    color: var(--color-gold);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* ============================================
+   EVENT MINI MODAL
+============================================ */
+.event-modal {
+    position: fixed;
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 0;
+    min-width: 280px;
+    max-width: 320px;
+    z-index: 1001;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.9);
+    transition: all var(--transition-fast);
+}
+
+.event-modal.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+.event-modal-header {
+    background: linear-gradient(135deg, var(--color-accent-red) 0%, #b91c1c 100%);
+    padding: 15px 20px;
+    border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.event-modal-date {
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.event-modal-close {
+    width: 28px;
+    height: 28px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition-fast);
+}
+
+.event-modal-close:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.event-modal-close svg {
+    width: 14px;
+    height: 14px;
+    fill: white;
+}
+
+.event-modal-body {
+    padding: 20px;
+}
+
+.event-modal-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--color-gold);
+}
+
+.event-modal-content {
+    font-size: 14px;
+    color: var(--color-text-light);
+    line-height: 1.6;
+}
+
+.event-modal-time {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 13px;
+    color: var(--color-text-light);
+}
+
+.event-modal-time svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--color-gold);
+}
+
+/* ============================================
+   NO RESULTS
+============================================ */
+.no-results {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--color-text-light);
+}
+
+.no-results svg {
+    width: 60px;
+    height: 60px;
+    fill: rgba(255, 255, 255, 0.3);
+    margin-bottom: 15px;
+}
+
+.no-results p {
+    font-size: 14px;
+}
+
+/* ============================================
+   RESPONSIVE - TABLET (max-width: 1200px)
+============================================ */
+@media (max-width: 1200px) {
+    .modules-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .calendar-news-section {
+        width: 280px;
+    }
+}
+
+/* ============================================
+   RESPONSIVE - TABLET SMALL (max-width: 1024px)
+============================================ */
+@media (max-width: 1024px) {
+    .bottom-section {
+        flex-direction: column;
+    }
+
+    .calendar-news-section {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .modules-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .modal {
+        max-width: 90%;
+    }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE LARGE (max-width: 768px)
+============================================ */
+@media (max-width: 768px) {
+    :root {
+        --sidebar-width: 60px;
+        --header-height: 70px;
+    }
+
+    .main-container {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .sidebar {
+        width: var(--sidebar-width);
+        padding: 20px 0;
+    }
+
+    .sidebar-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .sidebar-icon svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .banner {
+        padding: 25px;
+        min-height: 160px;
+    }
+
+    .banner-image {
+        width: 40%;
+        opacity: 0.7;
+    }
+
+    .modules-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+    }
+
+    .module-card {
+        padding: 15px 8px;
+        gap: 10px;
+    }
+
+    .module-icon {
+        width: 35px;
+        height: 35px;
+    }
+
+    .module-label {
+        font-size: 10px;
+    }
+
+    .modal-header {
+        padding: 20px;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .contact-card {
+        padding: 15px;
+        gap: 12px;
+    }
+
+    .contact-avatar {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+
+    .contact-name {
+        font-size: 14px;
+    }
+
+    .contact-department,
+    .contact-phone {
+        font-size: 12px;
+    }
+
+    .contact-email {
+        font-size: 11px;
+    }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE (max-width: 576px)
+============================================ */
+@media (max-width: 576px) {
+    .header {
+        height: 60px;
+    }
+
+    .logo-container {
+        width: 45px;
+        height: 45px;
+    }
+
+    .main-container {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        border-radius: var(--border-radius-md);
+        padding: 10px 20px;
+        order: 2;
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        z-index: 100;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .content-area {
+        margin-bottom: 70px;
+    }
+
+    .banner {
+        padding: 20px;
+        min-height: 140px;
+    }
+
+    .banner-title {
+        font-size: 1.3rem;
+    }
+
+    .banner-image {
+        display: none;
+    }
+
+    .banner-image-mobile {
+        display: block;
+        width: 100%;
+        height: 120px;
+        background: linear-gradient(135deg, rgba(30, 64, 175, 0.8) 0%, rgba(59, 130, 246, 0.6) 100%);
+        border-radius: var(--border-radius-md);
+        margin-top: 15px;
+    }
+
+    .modules-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .module-card {
+        padding: 12px 6px;
+        gap: 8px;
+    }
+
+    .module-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .module-label {
+        font-size: 9px;
+    }
+
+    .calendar {
+        padding: 20px;
+    }
+
+    .calendar-month {
+        font-size: 1.2rem;
+    }
+
+    .calendar-day {
+        padding: 8px 3px;
+        font-size: 12px;
+    }
+
+    .modal-title {
+        font-size: 1.2rem;
+    }
+
+    .event-modal {
+        left: 10px !important;
+        right: 10px !important;
+        max-width: none;
+        min-width: auto;
+    }
+
+    .contact-department-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE SMALL (max-width: 400px)
+============================================ */
+@media (max-width: 400px) {
+    .modules-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .module-card {
+        padding: 15px 10px;
+    }
+
+    .module-icon {
+        width: 35px;
+        height: 35px;
+    }
+
+    .module-label {
+        font-size: 10px;
+    }
+}
+
+/* ============================================
+   UTILITY - Hide on mobile
+============================================ */
+.banner-image-mobile {
+    display: none;
+}
+
+@media (max-width: 576px) {
+    .banner-image-mobile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.7);
+    }
+}
