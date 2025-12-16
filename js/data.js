@@ -24,7 +24,7 @@ const modulesData = [
         label: "CRM",
         type: "link",
         url: "#crm",
-        target: "_self",
+        target: "_blank",
         icon: "crm",
         highlight: null
     },
@@ -33,7 +33,7 @@ const modulesData = [
         label: "Capacitación",
         type: "link",
         url: "#capacitacion",
-        target: "_self",
+        target: "_blank",
         icon: "education",
         highlight: null
     },
@@ -42,7 +42,7 @@ const modulesData = [
         label: "Solicitud de Vacaciones",
         type: "link",
         url: "#vacaciones",
-        target: "_self",
+        target: "_blank",
         icon: "calendar",
         highlight: null
     },
@@ -51,7 +51,7 @@ const modulesData = [
         label: "Indicadores",
         type: "link",
         url: "#indicadores",
-        target: "_self",
+        target: "_blank",
         icon: "chart",
         highlight: null
     },
@@ -60,7 +60,7 @@ const modulesData = [
         label: "Reportes Seguridad",
         type: "link",
         url: "#reportes-seguridad",
-        target: "_self",
+        target: "_blank",
         icon: "alert",
         highlight: "red"
     },
@@ -69,7 +69,7 @@ const modulesData = [
         label: "Procedimientos",
         type: "link",
         url: "#procedimientos",
-        target: "_self",
+        target: "_blank",
         icon: "document",
         highlight: null
     },
@@ -78,7 +78,7 @@ const modulesData = [
         label: "Planeación",
         type: "link",
         url: "#planeacion",
-        target: "_self",
+        target: "_blank",
         icon: "planning",
         highlight: null
     },
@@ -87,7 +87,7 @@ const modulesData = [
         label: "Finanzas",
         type: "link",
         url: "#finanzas",
-        target: "_self",
+        target: "_blank",
         icon: "finance",
         highlight: null
     },
@@ -96,7 +96,7 @@ const modulesData = [
         label: "Seguridad e Higiene",
         type: "link",
         url: "#seguridad-higiene",
-        target: "_self",
+        target: "_blank",
         icon: "shield",
         highlight: null
     },
@@ -105,7 +105,7 @@ const modulesData = [
         label: "Solicitud EPP",
         type: "link",
         url: "#solicitud-epp",
-        target: "_self",
+        target: "_blank",
         icon: "epp",
         highlight: null
     },
@@ -114,7 +114,7 @@ const modulesData = [
         label: "Inventarios",
         type: "link",
         url: "#inventarios",
-        target: "_self",
+        target: "_blank",
         icon: "inventory",
         highlight: null
     },
@@ -123,7 +123,7 @@ const modulesData = [
         label: "Facturación",
         type: "link",
         url: "#facturacion",
-        target: "_self",
+        target: "_blank",
         icon: "invoice",
         highlight: null
     },
@@ -132,7 +132,7 @@ const modulesData = [
         label: "Almacén",
         type: "link",
         url: "#almacen",
-        target: "_self",
+        target: "_blank",
         icon: "warehouse",
         highlight: null
     },
@@ -141,7 +141,7 @@ const modulesData = [
         label: "Reporte ventas",
         type: "link",
         url: "#reporte-ventas",
-        target: "_self",
+        target: "_blank",
         icon: "sales",
         highlight: null
     },
@@ -150,7 +150,7 @@ const modulesData = [
         label: "Solicitud Compras",
         type: "link",
         url: "#solicitud-compras",
-        target: "_self",
+        target: "_blank",
         icon: "purchase",
         highlight: null
     },
@@ -159,7 +159,7 @@ const modulesData = [
         label: "Seguridad e Higiene",
         type: "link",
         url: "#seguridad-higiene-2",
-        target: "_self",
+        target: "_blank",
         icon: "settings",
         highlight: null
     },
@@ -168,7 +168,7 @@ const modulesData = [
         label: "Papelería",
         type: "link",
         url: "#papeleria",
-        target: "_self",
+        target: "_blank",
         icon: "stationery",
         highlight: null
     },
@@ -177,7 +177,7 @@ const modulesData = [
         label: "Salas de juntas",
         type: "link",
         url: "#salas-juntas",
-        target: "_self",
+        target: "_blank",
         icon: "meeting",
         highlight: null
     },
@@ -186,7 +186,7 @@ const modulesData = [
         label: "Soporte IT",
         type: "link",
         url: "#soporte-it",
-        target: "_self",
+        target: "_blank",
         icon: "support",
         highlight: "orange"
     }
