@@ -479,6 +479,80 @@ function initSidebarFab() {
 }
 
 // ============================================
+// BANNER SLIDER
+// ============================================
+let currentSlide = 0;
+let sliderInterval = null;
+
+/**
+ * Initialize the banner slider with automatic transitions
+ */
+function initBannerSlider() {
+    const slider = document.getElementById('bannerSlider');
+    const sliderMobile = document.getElementById('bannerSliderMobile');
+    const dotsContainer = document.getElementById('bannerDots');
+
+    if (!slider && !sliderMobile) return;
+
+    const slides = slider ? slider.querySelectorAll('.slide-image') : [];
+    const slidesMobile = sliderMobile ? sliderMobile.querySelectorAll('.slide-image') : [];
+    const dots = dotsContainer ? dotsContainer.querySelectorAll('.banner-dot') : [];
+
+    const totalSlides = Math.max(slides.length, slidesMobile.length);
+    if (totalSlides === 0) return;
+
+    /**
+     * Go to a specific slide
+     * @param {number} index - The slide index to show
+     */
+    function goToSlide(index) {
+        // Remove active class from all slides
+        slides.forEach(slide => slide.classList.remove('active'));
+        slidesMobile.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+
+        // Update current slide index
+        currentSlide = index;
+        if (currentSlide >= totalSlides) currentSlide = 0;
+        if (currentSlide < 0) currentSlide = totalSlides - 1;
+
+        // Add active class to current slide
+        if (slides[currentSlide]) slides[currentSlide].classList.add('active');
+        if (slidesMobile[currentSlide]) slidesMobile[currentSlide].classList.add('active');
+        if (dots[currentSlide]) dots[currentSlide].classList.add('active');
+    }
+
+    /**
+     * Go to the next slide
+     */
+    function nextSlide() {
+        goToSlide(currentSlide + 1);
+    }
+
+    // Add click handlers to dots
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            goToSlide(index);
+            // Reset interval when manually clicking
+            resetSliderInterval();
+        });
+    });
+
+    /**
+     * Reset the auto-slide interval
+     */
+    function resetSliderInterval() {
+        if (sliderInterval) {
+            clearInterval(sliderInterval);
+        }
+        sliderInterval = setInterval(nextSlide, 1500); // 1.5 seconds
+    }
+
+    // Start automatic sliding
+    resetSliderInterval();
+}
+
+// ============================================
 // INITIALIZATION
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -495,6 +569,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize sidebar FAB
     initSidebarFab();
+
+    // Initialize banner slider
+    initBannerSlider();
 
     // Initialize search input listener
     const searchInput = document.getElementById('contactSearch');

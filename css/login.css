@@ -280,6 +280,159 @@ body {
 }
 
 /* ============================================
+   SELECT2 STYLE DROPDOWN
+============================================ */
+.select2-container {
+    position: relative;
+    width: 100%;
+}
+
+.select2-selection {
+    width: 100%;
+    padding: 16px 50px 16px 16px;
+    background-color: var(--color-module-bg);
+    border: 2px solid transparent;
+    border-radius: var(--border-radius-md);
+    color: var(--color-text-white);
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 54px;
+}
+
+.select2-selection:hover {
+    border-color: rgba(201, 162, 39, 0.3);
+}
+
+.select2-container.active .select2-selection {
+    border-color: var(--color-gold);
+    border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+}
+
+.select2-selection-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.select2-selection-text.placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.select2-arrow {
+    width: 20px;
+    height: 20px;
+    fill: rgba(255, 255, 255, 0.4);
+    transition: var(--transition-fast);
+    flex-shrink: 0;
+    margin-left: 10px;
+}
+
+.select2-container.active .select2-arrow {
+    transform: rotate(180deg);
+    fill: var(--color-gold);
+}
+
+.select2-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--color-module-bg);
+    border: 2px solid var(--color-gold);
+    border-top: none;
+    border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--transition-fast);
+    max-height: 0;
+    overflow: hidden;
+}
+
+.select2-container.active .select2-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    max-height: 300px;
+}
+
+.select2-search {
+    padding: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.select2-search-input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-white);
+    font-family: inherit;
+    font-size: 13px;
+    transition: var(--transition-fast);
+}
+
+.select2-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.select2-search-input:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.select2-search svg {
+    position: absolute;
+    left: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    fill: rgba(255, 255, 255, 0.4);
+}
+
+.select2-results {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.select2-result {
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    font-size: 14px;
+    color: var(--color-text-light);
+}
+
+.select2-result:hover,
+.select2-result.highlighted {
+    background-color: rgba(201, 162, 39, 0.15);
+    color: var(--color-text-white);
+}
+
+.select2-result.selected {
+    background-color: rgba(201, 162, 39, 0.25);
+    color: var(--color-gold);
+}
+
+.select2-no-results {
+    padding: 16px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+}
+
+/* ============================================
    FORM OPTIONS
 ============================================ */
 .form-options {
