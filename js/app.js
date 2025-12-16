@@ -348,6 +348,137 @@ function initEventModalCloseOnOutsideClick() {
 }
 
 // ============================================
+// SIDEBAR FAB (Floating Action Button)
+// ============================================
+
+/**
+ * Toggle the sidebar FAB menu
+ */
+function toggleSidebarFab() {
+    const fabContainer = document.querySelector('.sidebar-fab-container');
+    const fab = document.getElementById('sidebarFab');
+
+    if (!fabContainer || !fab) return;
+
+    fabContainer.classList.toggle('active');
+    fab.classList.toggle('active');
+}
+
+/**
+ * Close the sidebar FAB menu
+ */
+function closeSidebarFab() {
+    const fabContainer = document.querySelector('.sidebar-fab-container');
+    const fab = document.getElementById('sidebarFab');
+
+    if (!fabContainer || !fab) return;
+
+    fabContainer.classList.remove('active');
+    fab.classList.remove('active');
+}
+
+/**
+ * Handle ticket/incident button click
+ */
+function handleTicketClick() {
+    // Close the FAB menu
+    closeSidebarFab();
+
+    // Show confirmation alert
+    showTicketAlert();
+}
+
+/**
+ * Show ticket submission alert
+ */
+function showTicketAlert() {
+    // Create alert container if it doesn't exist
+    let alertContainer = document.getElementById('mainAlertContainer');
+    if (!alertContainer) {
+        alertContainer = document.createElement('div');
+        alertContainer.id = 'mainAlertContainer';
+        alertContainer.className = 'main-alert-container';
+        document.body.appendChild(alertContainer);
+    }
+
+    // Create alert element
+    const alertId = Date.now();
+    const alert = document.createElement('div');
+    alert.className = 'main-alert main-alert-success';
+    alert.setAttribute('data-alert-id', alertId);
+    alert.innerHTML = `
+        <div class="main-alert-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        </div>
+        <div class="main-alert-content">
+            <div class="main-alert-title">Incidente Registrado</div>
+            <div class="main-alert-message">Un administrador se pondrá en contacto contigo pronto para dar seguimiento a tu solicitud.</div>
+        </div>
+        <button class="main-alert-close" onclick="closeMainAlert(${alertId})">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+    `;
+
+    alertContainer.appendChild(alert);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        closeMainAlert(alertId);
+    }, 5000);
+}
+
+/**
+ * Close a main alert by ID
+ * @param {number} alertId - The alert ID
+ */
+function closeMainAlert(alertId) {
+    const alert = document.querySelector(`[data-alert-id="${alertId}"]`);
+    if (!alert) return;
+
+    alert.classList.add('hiding');
+    setTimeout(() => {
+        alert.remove();
+    }, 300);
+}
+
+/**
+ * Initialize sidebar FAB functionality
+ */
+function initSidebarFab() {
+    const fab = document.getElementById('sidebarFab');
+    const ticketBtn = document.getElementById('ticketBtn');
+
+    if (fab) {
+        fab.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleSidebarFab();
+        });
+    }
+
+    if (ticketBtn) {
+        ticketBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            handleTicketClick();
+        });
+    }
+
+    // Close FAB when clicking outside
+    document.addEventListener('click', (e) => {
+        const fabContainer = document.querySelector('.sidebar-fab-container');
+        if (fabContainer && !fabContainer.contains(e.target)) {
+            closeSidebarFab();
+        }
+    });
+
+    // Close FAB on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeSidebarFab();
+        }
+    });
+}
+
+// ============================================
 // INITIALIZATION
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -361,6 +492,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initModalCloseOnOutsideClick();
     initModalCloseOnEscape();
     initEventModalCloseOnOutsideClick();
+
+    // Initialize sidebar FAB
+    initSidebarFab();
 
     // Initialize search input listener
     const searchInput = document.getElementById('contactSearch');
