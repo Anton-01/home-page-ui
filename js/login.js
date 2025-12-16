@@ -9,6 +9,268 @@ const DEMO_CREDENTIALS = {
 };
 
 // ============================================
+// COMPANIES DATA (JSON)
+// ============================================
+const companiesData = [
+    { id: 1, nombre: "Aceros Industriales S.A. de C.V." },
+    { id: 2, nombre: "Tecnología Avanzada MX" },
+    { id: 3, nombre: "Grupo Financiero Nacional" },
+    { id: 4, nombre: "Constructora del Norte" },
+    { id: 5, nombre: "Alimentos y Bebidas Premium" },
+    { id: 6, nombre: "Logística Express Internacional" },
+    { id: 7, nombre: "Farmacéutica Salud Total" },
+    { id: 8, nombre: "Energía Renovable Solar" },
+    { id: 9, nombre: "Telecomunicaciones Digitales" },
+    { id: 10, nombre: "Automotriz del Pacífico" },
+    { id: 11, nombre: "Textiles y Confecciones Modernas" },
+    { id: 12, nombre: "Minera Recursos Naturales" },
+    { id: 13, nombre: "Agropecuaria del Centro" },
+    { id: 14, nombre: "Servicios Profesionales Integrados" },
+    { id: 15, nombre: "Comercializadora Global Trade" }
+];
+
+// ============================================
+// SELECT2 STYLE DROPDOWN CLASS
+// ============================================
+class Select2Custom {
+    constructor(containerId, data, placeholder = 'Selecciona una opción') {
+        this.container = document.getElementById(containerId);
+        this.data = data;
+        this.placeholder = placeholder;
+        this.selectedValue = null;
+        this.selectedText = null;
+        this.isOpen = false;
+        this.highlightedIndex = -1;
+        this.filteredData = [...data];
+
+        if (this.container) {
+            this.init();
+        }
+    }
+
+    init() {
+        this.selection = this.container.querySelector('.select2-selection');
+        this.selectionText = this.container.querySelector('.select2-selection-text');
+        this.dropdown = this.container.querySelector('.select2-dropdown');
+        this.searchInput = this.container.querySelector('.select2-search-input');
+        this.resultsContainer = this.container.querySelector('.select2-results');
+        this.hiddenInput = this.container.querySelector('input[type="hidden"]');
+
+        // Set initial placeholder
+        this.selectionText.textContent = this.placeholder;
+        this.selectionText.classList.add('placeholder');
+
+        // Render initial options
+        this.renderOptions(this.data);
+
+        // Bind events
+        this.bindEvents();
+    }
+
+    bindEvents() {
+        // Toggle dropdown on selection click
+        this.selection.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggle();
+        });
+
+        // Search input
+        this.searchInput.addEventListener('input', (e) => {
+            this.filterOptions(e.target.value);
+        });
+
+        // Prevent dropdown close when clicking inside
+        this.dropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Focus search input when dropdown opens
+        this.searchInput.addEventListener('focus', () => {
+            this.highlightedIndex = -1;
+        });
+
+        // Keyboard navigation
+        this.searchInput.addEventListener('keydown', (e) => {
+            this.handleKeydown(e);
+        });
+
+        // Close on outside click
+        document.addEventListener('click', () => {
+            this.close();
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.isOpen) {
+                this.close();
+            }
+        });
+    }
+
+    toggle() {
+        if (this.isOpen) {
+            this.close();
+        } else {
+            this.open();
+        }
+    }
+
+    open() {
+        this.isOpen = true;
+        this.container.classList.add('active');
+        this.searchInput.value = '';
+        this.filterOptions('');
+        this.highlightedIndex = -1;
+
+        // Focus search input
+        setTimeout(() => {
+            this.searchInput.focus();
+        }, 100);
+    }
+
+    close() {
+        this.isOpen = false;
+        this.container.classList.remove('active');
+        this.highlightedIndex = -1;
+    }
+
+    filterOptions(searchTerm) {
+        const term = searchTerm.toLowerCase().trim();
+
+        if (!term) {
+            this.filteredData = [...this.data];
+        } else {
+            this.filteredData = this.data.filter(item =>
+                item.nombre.toLowerCase().includes(term)
+            );
+        }
+
+        this.renderOptions(this.filteredData);
+        this.highlightedIndex = -1;
+    }
+
+    renderOptions(options) {
+        if (options.length === 0) {
+            this.resultsContainer.innerHTML = `
+                <div class="select2-no-results">No se encontraron resultados</div>
+            `;
+            return;
+        }
+
+        this.resultsContainer.innerHTML = options.map((item, index) => `
+            <div class="select2-result ${this.selectedValue === item.id ? 'selected' : ''}"
+                 data-id="${item.id}"
+                 data-index="${index}">
+                ${item.nombre}
+            </div>
+        `).join('');
+
+        // Bind click events to results
+        this.resultsContainer.querySelectorAll('.select2-result').forEach(result => {
+            result.addEventListener('click', () => {
+                const id = parseInt(result.dataset.id);
+                const item = this.data.find(i => i.id === id);
+                if (item) {
+                    this.select(item);
+                }
+            });
+
+            result.addEventListener('mouseenter', () => {
+                this.highlightedIndex = parseInt(result.dataset.index);
+                this.updateHighlight();
+            });
+        });
+    }
+
+    select(item) {
+        this.selectedValue = item.id;
+        this.selectedText = item.nombre;
+
+        // Update display
+        this.selectionText.textContent = item.nombre;
+        this.selectionText.classList.remove('placeholder');
+
+        // Update hidden input
+        if (this.hiddenInput) {
+            this.hiddenInput.value = item.id;
+        }
+
+        // Close dropdown
+        this.close();
+
+        // Re-render to show selected state
+        this.renderOptions(this.filteredData);
+    }
+
+    handleKeydown(e) {
+        const results = this.resultsContainer.querySelectorAll('.select2-result');
+
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                if (this.highlightedIndex < results.length - 1) {
+                    this.highlightedIndex++;
+                    this.updateHighlight();
+                    this.scrollToHighlighted();
+                }
+                break;
+
+            case 'ArrowUp':
+                e.preventDefault();
+                if (this.highlightedIndex > 0) {
+                    this.highlightedIndex--;
+                    this.updateHighlight();
+                    this.scrollToHighlighted();
+                }
+                break;
+
+            case 'Enter':
+                e.preventDefault();
+                if (this.highlightedIndex >= 0 && this.filteredData[this.highlightedIndex]) {
+                    this.select(this.filteredData[this.highlightedIndex]);
+                }
+                break;
+        }
+    }
+
+    updateHighlight() {
+        const results = this.resultsContainer.querySelectorAll('.select2-result');
+        results.forEach((result, index) => {
+            result.classList.toggle('highlighted', index === this.highlightedIndex);
+        });
+    }
+
+    scrollToHighlighted() {
+        const highlighted = this.resultsContainer.querySelector('.select2-result.highlighted');
+        if (highlighted) {
+            highlighted.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+    }
+
+    getValue() {
+        return this.selectedValue;
+    }
+
+    getText() {
+        return this.selectedText;
+    }
+
+    reset() {
+        this.selectedValue = null;
+        this.selectedText = null;
+        this.selectionText.textContent = this.placeholder;
+        this.selectionText.classList.add('placeholder');
+        if (this.hiddenInput) {
+            this.hiddenInput.value = '';
+        }
+        this.renderOptions(this.data);
+    }
+}
+
+// Global company select instance
+let companySelect;
+
+// ============================================
 // ALERT SYSTEM
 // ============================================
 class AlertSystem {
@@ -461,6 +723,9 @@ function initPasswordResetModal() {
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize alert system
     alertSystem = new AlertSystem();
+
+    // Initialize company select (Select2 style)
+    companySelect = new Select2Custom('companySelect', companiesData, 'Selecciona una compañía');
 
     // Initialize form
     const loginForm = document.getElementById('loginForm');
