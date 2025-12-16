@@ -279,6 +279,183 @@ function initInputListeners() {
 }
 
 // ============================================
+// PASSWORD RESET MODAL FUNCTIONS
+// ============================================
+
+/**
+ * Open the password reset modal
+ * @param {Event} e - Click event
+ */
+function openPasswordResetModal(e) {
+    if (e) e.preventDefault();
+
+    const modal = document.getElementById('passwordResetModal');
+    if (!modal) return;
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // Reset form state
+    const resetEmailInput = document.getElementById('resetEmail');
+    const resetEmailError = document.getElementById('resetEmailError');
+    const resetBtn = document.getElementById('passwordResetBtn');
+
+    if (resetEmailInput) {
+        resetEmailInput.value = '';
+        clearInputError(resetEmailInput);
+    }
+    if (resetEmailError) resetEmailError.textContent = '';
+    if (resetBtn) resetBtn.disabled = true;
+
+    // Focus on email input
+    setTimeout(() => {
+        if (resetEmailInput) resetEmailInput.focus();
+    }, 300);
+}
+
+/**
+ * Close the password reset modal
+ */
+function closePasswordResetModal() {
+    const modal = document.getElementById('passwordResetModal');
+    if (!modal) return;
+
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+/**
+ * Validate reset email and update button state
+ */
+function validateResetEmail() {
+    const resetEmailInput = document.getElementById('resetEmail');
+    const resetEmailError = document.getElementById('resetEmailError');
+    const resetBtn = document.getElementById('passwordResetBtn');
+
+    if (!resetEmailInput || !resetBtn) return;
+
+    const email = resetEmailInput.value.trim();
+
+    // Check if empty
+    if (!email) {
+        resetEmailError.textContent = '';
+        resetBtn.disabled = true;
+        clearInputError(resetEmailInput);
+        return false;
+    }
+
+    // Check if valid email
+    if (!isValidEmail(email)) {
+        resetEmailError.textContent = 'Por favor ingresa un correo electrónico válido';
+        resetBtn.disabled = true;
+        return false;
+    }
+
+    // Email is valid
+    resetEmailError.textContent = '';
+    resetBtn.disabled = false;
+    clearInputError(resetEmailInput);
+    return true;
+}
+
+/**
+ * Handle password reset form submission
+ * @param {Event} e - Form submit event
+ */
+async function handlePasswordReset(e) {
+    e.preventDefault();
+
+    const resetEmailInput = document.getElementById('resetEmail');
+    const resetEmailError = document.getElementById('resetEmailError');
+    const resetBtn = document.getElementById('passwordResetBtn');
+
+    const email = resetEmailInput.value.trim();
+
+    // Validate email
+    if (!email) {
+        setInputError(resetEmailInput);
+        resetEmailError.textContent = 'El correo electrónico es requerido';
+        alertSystem.error('Campo requerido', 'Por favor ingresa tu correo electrónico');
+        resetEmailInput.focus();
+        return;
+    }
+
+    if (!isValidEmail(email)) {
+        setInputError(resetEmailInput);
+        resetEmailError.textContent = 'Por favor ingresa un correo electrónico válido';
+        alertSystem.error('Correo inválido', 'Por favor ingresa un correo electrónico válido');
+        resetEmailInput.focus();
+        return;
+    }
+
+    // Show loading state
+    resetBtn.classList.add('loading');
+    resetBtn.disabled = true;
+
+    // Simulate API call
+    try {
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        // Close modal
+        closePasswordResetModal();
+
+        // Show success message
+        alertSystem.success(
+            'Solicitud enviada',
+            'Un administrador se pondrá en contacto contigo para restablecer tu contraseña.',
+            5000
+        );
+
+    } catch (error) {
+        alertSystem.error('Error', 'Ocurrió un error al procesar tu solicitud. Intenta nuevamente.');
+    } finally {
+        resetBtn.classList.remove('loading');
+        resetBtn.disabled = false;
+    }
+}
+
+/**
+ * Initialize password reset modal event listeners
+ */
+function initPasswordResetModal() {
+    const modal = document.getElementById('passwordResetModal');
+    const resetForm = document.getElementById('passwordResetForm');
+    const resetEmailInput = document.getElementById('resetEmail');
+
+    if (!modal) return;
+
+    // Form submit handler
+    if (resetForm) {
+        resetForm.addEventListener('submit', handlePasswordReset);
+    }
+
+    // Real-time email validation
+    if (resetEmailInput) {
+        resetEmailInput.addEventListener('input', validateResetEmail);
+        resetEmailInput.addEventListener('blur', function() {
+            const email = this.value.trim();
+            if (email && !isValidEmail(email)) {
+                setInputError(this);
+            }
+        });
+    }
+
+    // Close modal on overlay click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closePasswordResetModal();
+        }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closePasswordResetModal();
+        }
+    });
+}
+
+// ============================================
 // INITIALIZATION
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -300,10 +477,13 @@ document.addEventListener('DOMContentLoaded', () => {
         passwordToggle.addEventListener('click', togglePasswordVisibility);
     }
 
+    // Initialize password reset modal
+    initPasswordResetModal();
+
     // Show demo credentials hint after 2 seconds
     setTimeout(() => {
-        alertSystem.show('warning', 'Credenciales de prueba', 
-            `Email: ${DEMO_CREDENTIALS.email} | Password: ${DEMO_CREDENTIALS.password}`, 
+        alertSystem.show('warning', 'Credenciales de prueba',
+            `Email: ${DEMO_CREDENTIALS.email} | Password: ${DEMO_CREDENTIALS.password}`,
             5000);
     }, 2000);
 });
