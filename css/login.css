@@ -565,6 +565,180 @@ body {
 }
 
 /* ============================================
+   PASSWORD RESET MODAL
+============================================ */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(10, 23, 68, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--border-radius-lg);
+    width: 100%;
+    max-width: 450px;
+    overflow: hidden;
+    transform: scale(0.9) translateY(20px);
+    transition: transform var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-overlay.active .modal {
+    transform: scale(1) translateY(0);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--color-module-bg) 0%, #2563eb 100%);
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.modal-title-icon {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: var(--border-radius-sm);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-title-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--color-gold);
+}
+
+.modal-close {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition-fast);
+}
+
+.modal-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.modal-close svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-text-white);
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.password-reset-description {
+    font-size: 14px;
+    color: var(--color-text-light);
+    line-height: 1.6;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.password-reset-form .form-group {
+    margin-bottom: 25px;
+}
+
+.form-error-message {
+    display: block;
+    font-size: 12px;
+    color: var(--color-error);
+    margin-top: 8px;
+    min-height: 18px;
+}
+
+.password-reset-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-accent-orange) 100%);
+    border: none;
+    border-radius: var(--border-radius-md);
+    color: white;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.password-reset-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(201, 162, 39, 0.4);
+}
+
+.password-reset-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.password-reset-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+}
+
+.password-reset-btn .btn-text {
+    transition: var(--transition-fast);
+}
+
+.password-reset-btn .btn-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.password-reset-btn.loading .btn-text {
+    opacity: 0;
+}
+
+.password-reset-btn.loading .btn-loader {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ============================================
    RESPONSIVE
 ============================================ */
 @media (max-width: 480px) {
@@ -598,5 +772,22 @@ body {
         left: 10px;
         right: 10px;
         max-width: none;
+    }
+
+    .modal {
+        max-width: 100%;
+        margin: 10px;
+    }
+
+    .modal-header {
+        padding: 20px;
+    }
+
+    .modal-title {
+        font-size: 1.1rem;
+    }
+
+    .modal-body {
+        padding: 25px 20px;
     }
 }
