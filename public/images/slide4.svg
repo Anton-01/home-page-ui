@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
+  <defs>
+    <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#dc2626;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="500" height="200" fill="url(#grad4)"/>
+  <circle cx="100" cy="50" r="40" fill="rgba(255,255,255,0.1)"/>
+  <circle cx="400" cy="150" r="60" fill="rgba(255,255,255,0.1)"/>
+  <g transform="translate(180, 40)">
+    <circle cx="70" cy="50" r="40" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.4)" stroke-width="3"/>
+    <circle cx="70" cy="50" r="30" fill="rgba(255,255,255,0.1)"/>
+    <path d="M70 50 L70 25" stroke="#c9a227" stroke-width="3" stroke-linecap="round"/>
+    <path d="M70 50 L85 60" stroke="#c9a227" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="70" cy="50" r="5" fill="#c9a227"/>
+    <rect x="130" y="30" width="60" height="12" rx="6" fill="rgba(255,255,255,0.3)"/>
+    <rect x="130" y="50" width="45" height="12" rx="6" fill="rgba(255,255,255,0.3)"/>
+    <rect x="130" y="70" width="55" height="12" rx="6" fill="rgba(255,255,255,0.3)"/>
+  </g>
+  <text x="250" y="170" font-family="Poppins, sans-serif" font-size="14" fill="rgba(255,255,255,0.9)" text-anchor="middle">Gestion del Tiempo</text>
+</svg>

@@ -1,0 +1,44 @@
+[
+  {
+    "day": 6,
+    "title": "Junta de Directivos",
+    "content": "Reunión mensual para revisar indicadores clave y objetivos del trimestre.",
+    "time": "09:00 - 11:00"
+  },
+  {
+    "day": 10,
+    "title": "Capacitación: Seguridad Industrial",
+    "content": "Curso obligatorio para todo el personal del área de producción.",
+    "time": "14:00 - 17:00"
+  },
+  {
+    "day": 14,
+    "title": "Reunión de Planeación",
+    "content": "Definición de estrategias y metas para el primer trimestre de 2025.",
+    "time": "10:00 - 12:00"
+  },
+  {
+    "day": 15,
+    "title": "Auditoría Interna",
+    "content": "Revisión de procesos y documentación del sistema de gestión de calidad.",
+    "time": "08:00 - 13:00"
+  },
+  {
+    "day": 20,
+    "title": "Día de Integración",
+    "content": "Actividades recreativas y de team building para todos los colaboradores.",
+    "time": "12:00 - 18:00"
+  },
+  {
+    "day": 24,
+    "title": "Entrega de Reportes",
+    "content": "Fecha límite para entregar reportes mensuales de cada departamento.",
+    "time": "Todo el día"
+  },
+  {
+    "day": 28,
+    "title": "Mantenimiento Programado",
+    "content": "Mantenimiento preventivo de equipos de cómputo y servidores.",
+    "time": "18:00 - 22:00"
+  }
+]

@@ -1,0 +1,241 @@
+---
+interface Props {
+  id: number;
+  nombre: string;
+  departamento: string;
+  email: string;
+  telefono: string;
+  extension: string;
+  imagen?: string | null;
+  initials: string;
+  avatarColor: string;
+}
+
+const { nombre, departamento, email, telefono, extension, imagen, initials, avatarColor } = Astro.props;
+---
+
+<div class="contact-card">
+  <div class="contact-avatar" style={imagen ? '' : `background-color: ${avatarColor}`}>
+    {imagen ? (
+      <img src={imagen} alt={nombre} />
+    ) : (
+      initials
+    )}
+  </div>
+  <div class="contact-info">
+    <div class="contact-name">{nombre}</div>
+    <div class="contact-department-row">
+      <span class="contact-department">{departamento}</span>
+      <div class="contact-email-container">
+        <span class="contact-email">{email}</span>
+        <button class="copy-email-btn" data-email={email} title="Copiar correo">
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+          <span class="copy-tooltip">¡Copiado!</span>
+        </button>
+      </div>
+    </div>
+    <div class="contact-phone">
+      <svg viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+      {telefono}
+      <span class="contact-extension">Ext. {extension}</span>
+    </div>
+  </div>
+</div>
+
+<style>
+.contact-card {
+  background-color: var(--color-module-bg);
+  border-radius: var(--border-radius-md);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  transition: var(--transition-fast);
+}
+
+.contact-card:hover {
+  background-color: var(--color-module-hover);
+}
+
+.contact-avatar {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  font-weight: 600;
+  color: white;
+  overflow: hidden;
+}
+
+.contact-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.contact-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.contact-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contact-department-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.contact-department {
+  font-size: 13px;
+  color: var(--color-gold);
+}
+
+.contact-email-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.contact-email {
+  font-size: 12px;
+  color: var(--color-text-light);
+  opacity: 0.8;
+}
+
+.copy-email-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+  position: relative;
+}
+
+.copy-email-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.copy-email-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: var(--color-text-light);
+  transition: var(--transition-fast);
+}
+
+.copy-email-btn:hover svg {
+  fill: var(--color-gold);
+}
+
+.copy-email-btn.copied svg {
+  fill: var(--color-success);
+}
+
+.copy-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-5px);
+  background-color: var(--color-success);
+  color: white;
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-fast);
+  pointer-events: none;
+}
+
+.copy-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--color-success);
+}
+
+.copy-email-btn.copied .copy-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-8px);
+}
+
+.contact-phone {
+  font-size: 13px;
+  color: var(--color-text-light);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contact-phone svg {
+  width: 14px;
+  height: 14px;
+  fill: var(--color-text-light);
+}
+
+.contact-extension {
+  background-color: rgba(201, 162, 39, 0.2);
+  color: var(--color-gold);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact-card {
+    padding: 15px;
+    gap: 12px;
+  }
+
+  .contact-avatar {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+
+  .contact-name {
+    font-size: 14px;
+  }
+
+  .contact-department,
+  .contact-phone {
+    font-size: 12px;
+  }
+
+  .contact-email {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 576px) {
+  .contact-department-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+</style>

@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1,
+    "nombre": "María García López",
+    "departamento": "Recursos Humanos",
+    "email": "maria.garcia@empresa.com",
+    "telefono": "55 1234 5678",
+    "extension": "101",
+    "imagen": null
+  },
+  {
+    "id": 2,
+    "nombre": "Carlos Rodríguez Mendoza",
+    "departamento": "Tecnología de la Información",
+    "email": "carlos.rodriguez@empresa.com",
+    "telefono": "55 1234 5679",
+    "extension": "205",
+    "imagen": null
+  },
+  {
+    "id": 3,
+    "nombre": "Ana Martínez Sánchez",
+    "departamento": "Finanzas",
+    "email": "ana.martinez@empresa.com",
+    "telefono": "55 1234 5680",
+    "extension": "302",
+    "imagen": null
+  },
+  {
+    "id": 4,
+    "nombre": "Roberto Hernández Villa",
+    "departamento": "Operaciones",
+    "email": "roberto.hernandez@empresa.com",
+    "telefono": "55 1234 5681",
+    "extension": "150",
+    "imagen": null
+  },
+  {
+    "id": 5,
+    "nombre": "Patricia Jiménez Torres",
+    "departamento": "Marketing",
+    "email": "patricia.jimenez@empresa.com",
+    "telefono": "55 1234 5682",
+    "extension": "410",
+    "imagen": null
+  },
+  {
+    "id": 6,
+    "nombre": "Fernando López Díaz",
+    "departamento": "Ventas",
+    "email": "fernando.lopez@empresa.com",
+    "telefono": "55 1234 5683",
+    "extension": "501",
+    "imagen": null
+  },
+  {
+    "id": 7,
+    "nombre": "Laura Sánchez Moreno",
+    "departamento": "Compras",
+    "email": "laura.sanchez@empresa.com",
+    "telefono": "55 1234 5684",
+    "extension": "220",
+    "imagen": null
+  },
+  {
+    "id": 8,
+    "nombre": "Miguel Ángel Ramírez",
+    "departamento": "Logística",
+    "email": "miguel.ramirez@empresa.com",
+    "telefono": "55 1234 5685",
+    "extension": "330",
+    "imagen": null
+  },
+  {
+    "id": 9,
+    "nombre": "Gabriela Fernández Castro",
+    "departamento": "Calidad",
+    "email": "gabriela.fernandez@empresa.com",
+    "telefono": "55 1234 5686",
+    "extension": "125",
+    "imagen": null
+  },
+  {
+    "id": 10,
+    "nombre": "José Luis Morales Ruiz",
+    "departamento": "Producción",
+    "email": "jose.morales@empresa.com",
+    "telefono": "55 1234 5687",
+    "extension": "180",
+    "imagen": null
+  },
+  {
+    "id": 11,
+    "nombre": "Alejandra Vega Núñez",
+    "departamento": "Contabilidad",
+    "email": "alejandra.vega@empresa.com",
+    "telefono": "55 1234 5688",
+    "extension": "305",
+    "imagen": null
+  },
+  {
+    "id": 12,
+    "nombre": "Ricardo Peña Salazar",
+    "departamento": "Legal",
+    "email": "ricardo.pena@empresa.com",
+    "telefono": "55 1234 5689",
+    "extension": "400",
+    "imagen": null
+  }
+]

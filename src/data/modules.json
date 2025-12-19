@@ -1,0 +1,190 @@
+[
+  {
+    "id": "email",
+    "label": "Email",
+    "type": "link",
+    "url": "https://mail.empresa.com",
+    "target": "_blank",
+    "icon": "email",
+    "highlight": null
+  },
+  {
+    "id": "contactos",
+    "label": "Contactos",
+    "type": "modal",
+    "modalId": "contactsModal",
+    "icon": "contacts",
+    "highlight": null
+  },
+  {
+    "id": "crm",
+    "label": "CRM",
+    "type": "link",
+    "url": "#crm",
+    "target": "_blank",
+    "icon": "crm",
+    "highlight": null
+  },
+  {
+    "id": "capacitacion",
+    "label": "Capacitación",
+    "type": "link",
+    "url": "#capacitacion",
+    "target": "_blank",
+    "icon": "education",
+    "highlight": null
+  },
+  {
+    "id": "vacaciones",
+    "label": "Solicitud de Vacaciones",
+    "type": "link",
+    "url": "#vacaciones",
+    "target": "_blank",
+    "icon": "calendar",
+    "highlight": null
+  },
+  {
+    "id": "indicadores",
+    "label": "Indicadores",
+    "type": "link",
+    "url": "#indicadores",
+    "target": "_blank",
+    "icon": "chart",
+    "highlight": null
+  },
+  {
+    "id": "reportes-seguridad",
+    "label": "Reportes Seguridad",
+    "type": "link",
+    "url": "#reportes-seguridad",
+    "target": "_blank",
+    "icon": "alert",
+    "highlight": "red"
+  },
+  {
+    "id": "procedimientos",
+    "label": "Procedimientos",
+    "type": "link",
+    "url": "#procedimientos",
+    "target": "_blank",
+    "icon": "document",
+    "highlight": null
+  },
+  {
+    "id": "planeacion",
+    "label": "Planeación",
+    "type": "link",
+    "url": "#planeacion",
+    "target": "_blank",
+    "icon": "planning",
+    "highlight": null
+  },
+  {
+    "id": "finanzas",
+    "label": "Finanzas",
+    "type": "link",
+    "url": "#finanzas",
+    "target": "_blank",
+    "icon": "finance",
+    "highlight": null
+  },
+  {
+    "id": "seguridad-higiene",
+    "label": "Seguridad e Higiene",
+    "type": "link",
+    "url": "#seguridad-higiene",
+    "target": "_blank",
+    "icon": "shield",
+    "highlight": null
+  },
+  {
+    "id": "solicitud-epp",
+    "label": "Solicitud EPP",
+    "type": "link",
+    "url": "#solicitud-epp",
+    "target": "_blank",
+    "icon": "epp",
+    "highlight": null
+  },
+  {
+    "id": "inventarios",
+    "label": "Inventarios",
+    "type": "link",
+    "url": "#inventarios",
+    "target": "_blank",
+    "icon": "inventory",
+    "highlight": null
+  },
+  {
+    "id": "facturacion",
+    "label": "Facturación",
+    "type": "link",
+    "url": "#facturacion",
+    "target": "_blank",
+    "icon": "invoice",
+    "highlight": null
+  },
+  {
+    "id": "almacen",
+    "label": "Almacén",
+    "type": "link",
+    "url": "#almacen",
+    "target": "_blank",
+    "icon": "warehouse",
+    "highlight": null
+  },
+  {
+    "id": "reporte-ventas",
+    "label": "Reporte ventas",
+    "type": "link",
+    "url": "#reporte-ventas",
+    "target": "_blank",
+    "icon": "sales",
+    "highlight": null
+  },
+  {
+    "id": "solicitud-compras",
+    "label": "Solicitud Compras",
+    "type": "link",
+    "url": "#solicitud-compras",
+    "target": "_blank",
+    "icon": "purchase",
+    "highlight": null
+  },
+  {
+    "id": "seguridad-higiene-2",
+    "label": "Seguridad e Higiene",
+    "type": "link",
+    "url": "#seguridad-higiene-2",
+    "target": "_blank",
+    "icon": "settings",
+    "highlight": null
+  },
+  {
+    "id": "papeleria",
+    "label": "Papelería",
+    "type": "link",
+    "url": "#papeleria",
+    "target": "_blank",
+    "icon": "stationery",
+    "highlight": null
+  },
+  {
+    "id": "salas-juntas",
+    "label": "Salas de juntas",
+    "type": "link",
+    "url": "#salas-juntas",
+    "target": "_blank",
+    "icon": "meeting",
+    "highlight": null
+  },
+  {
+    "id": "soporte-it",
+    "label": "Soporte IT",
+    "type": "link",
+    "url": "#soporte-it",
+    "target": "_blank",
+    "icon": "support",
+    "highlight": "orange"
+  }
+]

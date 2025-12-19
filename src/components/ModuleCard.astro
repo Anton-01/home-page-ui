@@ -1,0 +1,150 @@
+---
+import { getIcon } from '../data/icons';
+
+interface Props {
+  id: string;
+  label: string;
+  type: 'link' | 'modal';
+  url?: string;
+  target?: string;
+  modalId?: string;
+  icon: string;
+  highlight?: string | null;
+}
+
+const { id, label, type, url, target, modalId, icon, highlight } = Astro.props;
+const iconSvg = getIcon(icon);
+const highlightClass = highlight ? `highlight-${highlight}` : '';
+---
+
+{type === 'link' ? (
+  <a href={url} target={target || '_self'} class:list={['module-card', highlightClass]} data-id={id}>
+    <div class="module-icon">
+      <svg viewBox="0 0 24 24" set:html={iconSvg}></svg>
+    </div>
+    <span class="module-label">{label}</span>
+  </a>
+) : (
+  <button class:list={['module-card', highlightClass]} data-modal-id={modalId} data-id={id}>
+    <div class="module-icon">
+      <svg viewBox="0 0 24 24" set:html={iconSvg}></svg>
+    </div>
+    <span class="module-label">{label}</span>
+  </button>
+)}
+
+<style>
+.module-card {
+  background-color: var(--color-module-bg);
+  border-radius: var(--border-radius-md);
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  text-decoration: none;
+  color: var(--color-text-white);
+  border: none;
+  font-family: inherit;
+}
+
+.module-card:hover {
+  background-color: var(--color-module-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.module-card.highlight-red {
+  background-color: var(--color-accent-red);
+}
+
+.module-card.highlight-red:hover {
+  background-color: #b91c1c;
+}
+
+.module-card.highlight-orange {
+  background-color: var(--color-accent-orange);
+}
+
+.module-card.highlight-orange:hover {
+  background-color: #d97706;
+}
+
+.module-icon {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.module-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: var(--color-gold);
+}
+
+.module-card.highlight-red .module-icon svg,
+.module-card.highlight-orange .module-icon svg {
+  fill: var(--color-text-white);
+}
+
+.module-label {
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.3;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .module-card {
+    padding: 15px 8px;
+    gap: 10px;
+  }
+
+  .module-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .module-label {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .module-card {
+    padding: 12px 6px;
+    gap: 8px;
+  }
+
+  .module-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .module-label {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 400px) {
+  .module-card {
+    padding: 15px 10px;
+  }
+
+  .module-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .module-label {
+    font-size: 10px;
+  }
+}
+</style>

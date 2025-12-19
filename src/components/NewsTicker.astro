@@ -1,0 +1,115 @@
+---
+interface NewsItem {
+  id: number;
+  text: string;
+}
+
+interface Props {
+  items: NewsItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="news-ticker-container">
+  <div class="news-ticker-header">
+    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/></svg>
+    <span>Noticias</span>
+  </div>
+  <div class="news-ticker-wrapper">
+    <div class="news-ticker-track" id="newsTickerTrack">
+      {items.map(item => (
+        <span class="news-item">{item.text}</span>
+      ))}
+      {items.map(item => (
+        <span class="news-item">{item.text}</span>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+.news-ticker-container {
+  background: linear-gradient(135deg, var(--color-module-bg) 0%, #2563eb 100%);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.news-ticker-header {
+  background-color: var(--color-accent-red);
+  padding: 8px 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.news-ticker-header svg {
+  width: 18px;
+  height: 18px;
+  fill: white;
+}
+
+.news-ticker-header span {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.news-ticker-wrapper {
+  overflow: hidden;
+  position: relative;
+  height: 45px;
+  display: flex;
+  align-items: center;
+}
+
+.news-ticker-track {
+  display: flex;
+  animation: ticker 30s linear infinite;
+  white-space: nowrap;
+}
+
+.news-ticker-track:hover {
+  animation-play-state: paused;
+}
+
+.news-item {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 40px;
+  font-size: 13px;
+  color: var(--color-text-light);
+}
+
+.news-item::before {
+  content: '•';
+  margin-right: 15px;
+  color: var(--color-gold);
+  font-size: 18px;
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+</style>
+
+<script>
+function initNewsTicker() {
+  const track = document.getElementById('newsTickerTrack');
+  if (!track) return;
+
+  const contentWidth = track.scrollWidth / 2;
+  const duration = contentWidth / 50;
+  track.style.animationDuration = `${duration}s`;
+}
+
+document.addEventListener('DOMContentLoaded', initNewsTicker);
+</script>
