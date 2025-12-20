@@ -1,0 +1,105 @@
+---
+import ModuleCard from './ModuleCard.astro';
+
+interface Module {
+  id: string;
+  label: string;
+  type: 'link' | 'modal';
+  url?: string;
+  target?: string;
+  modalId?: string;
+  icon: string;
+  highlight?: string | null;
+}
+
+interface Props {
+  modules: Module[];
+}
+
+const { modules } = Astro.props;
+---
+
+<div class="modules-container">
+  <div class="modules-grid" id="modulesGrid">
+    {modules.map(module => (
+      <ModuleCard {...module} />
+    ))}
+  </div>
+</div>
+
+<style>
+.modules-container {
+  flex: 1;
+  min-width: 0;
+}
+
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 15px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .modules-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .modules-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .modules-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .modules-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  .modules-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+</style>
+
+<script>
+// Handle modal opening for module cards
+function initModuleCards() {
+  const modalButtons = document.querySelectorAll('.module-card[data-modal-id]');
+
+  modalButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const modalId = button.getAttribute('data-modal-id');
+      if (modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+
+          // Reset search if contacts modal
+          if (modalId === 'contactsModal') {
+            const searchInput = document.getElementById('contactSearch') as HTMLInputElement;
+            if (searchInput) {
+              searchInput.value = '';
+              searchInput.dispatchEvent(new Event('input'));
+            }
+          }
+        }
+      }
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initModuleCards);
+</script>

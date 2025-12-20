@@ -1,0 +1,17 @@
+[
+  { "id": 1, "nombre": "Aceros Industriales S.A. de C.V." },
+  { "id": 2, "nombre": "Tecnología Avanzada MX" },
+  { "id": 3, "nombre": "Grupo Financiero Nacional" },
+  { "id": 4, "nombre": "Constructora del Norte" },
+  { "id": 5, "nombre": "Alimentos y Bebidas Premium" },
+  { "id": 6, "nombre": "Logística Express Internacional" },
+  { "id": 7, "nombre": "Farmacéutica Salud Total" },
+  { "id": 8, "nombre": "Energía Renovable Solar" },
+  { "id": 9, "nombre": "Telecomunicaciones Digitales" },
+  { "id": 10, "nombre": "Automotriz del Pacífico" },
+  { "id": 11, "nombre": "Textiles y Confecciones Modernas" },
+  { "id": 12, "nombre": "Minera Recursos Naturales" },
+  { "id": 13, "nombre": "Agropecuaria del Centro" },
+  { "id": 14, "nombre": "Servicios Profesionales Integrados" },
+  { "id": 15, "nombre": "Comercializadora Global Trade" }
+]

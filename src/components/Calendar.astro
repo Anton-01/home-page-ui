@@ -1,0 +1,415 @@
+---
+interface CalendarEvent {
+  day: number;
+  title: string;
+  content: string;
+  time: string;
+}
+
+interface Props {
+  events: CalendarEvent[];
+  month?: string;
+  year?: number;
+}
+
+const { events, month = 'ENERO', year = 2025 } = Astro.props;
+
+// January 2025 starts on Wednesday (offset is 2 counting from Monday)
+const firstDayOffset = 2;
+const daysInMonth = 31;
+const today = new Date();
+const currentDay = today.getDate();
+const currentMonth = today.getMonth();
+const currentYear = today.getFullYear();
+
+// Use today's date if we're in January 2025, otherwise use 14 as demo
+const highlightDay = (currentMonth === 0 && currentYear === 2025) ? currentDay : 14;
+
+// Create event lookup map
+const eventsMap = new Map<number, CalendarEvent>();
+events.forEach(event => {
+  eventsMap.set(event.day, event);
+});
+
+// Generate calendar days
+const emptyDays = Array(firstDayOffset).fill(null);
+const monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+---
+
+<div class="calendar-section">
+  <div class="calendar-container">
+    <div class="calendar">
+      <div class="calendar-header">
+        <h2 class="calendar-month">{month} {year}</h2>
+      </div>
+      <div class="calendar-weekdays">
+        <span class="calendar-weekday">L</span>
+        <span class="calendar-weekday">M</span>
+        <span class="calendar-weekday">M</span>
+        <span class="calendar-weekday">J</span>
+        <span class="calendar-weekday">V</span>
+        <span class="calendar-weekday">S</span>
+        <span class="calendar-weekday">D</span>
+      </div>
+      <div class="calendar-days" id="calendarDays">
+        {emptyDays.map(() => (
+          <span class="calendar-day empty"></span>
+        ))}
+        {monthDays.map(day => {
+          const event = eventsMap.get(day);
+          const isToday = day === highlightDay;
+          const hasEvent = !!event;
+
+          return (
+            <span
+              class:list={['calendar-day', { today: isToday, 'has-event': hasEvent }]}
+              data-day={day}
+              data-event={hasEvent ? JSON.stringify(event) : undefined}
+            >
+              {day}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Event Mini Modal -->
+<div class="event-modal" id="eventModal">
+  <div class="event-modal-header">
+    <span class="event-modal-date" id="eventModalDate"></span>
+    <button class="event-modal-close" id="closeEventModal">
+      <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+    </button>
+  </div>
+  <div class="event-modal-body">
+    <h3 class="event-modal-title" id="eventModalTitle"></h3>
+    <p class="event-modal-content" id="eventModalContent"></p>
+    <div class="event-modal-time" id="eventModalTime">
+      <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+      <span id="eventModalTimeText"></span>
+    </div>
+  </div>
+</div>
+
+<style>
+.calendar-section {
+  width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.calendar-container {
+  width: 100%;
+}
+
+.calendar {
+  background-color: var(--color-calendar-bg);
+  border-radius: var(--border-radius-lg);
+  padding: 25px;
+  color: #1e293b;
+}
+
+.calendar-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.calendar-month {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: #475569;
+  padding: 8px 0;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.calendar-day {
+  text-align: center;
+  padding: 10px 5px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  position: relative;
+}
+
+.calendar-day:hover:not(.empty) {
+  background-color: #e2e8f0;
+}
+
+.calendar-day.today {
+  background-color: var(--color-gold);
+  color: white;
+}
+
+.calendar-day.empty {
+  visibility: hidden;
+}
+
+.calendar-day.has-event {
+  font-weight: 700;
+}
+
+.calendar-day.has-event::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-accent-red);
+  border-radius: 50%;
+}
+
+.calendar-day.today.has-event::after {
+  background-color: white;
+}
+
+/* Event Modal */
+.event-modal {
+  position: fixed;
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--border-radius-md);
+  padding: 0;
+  min-width: 280px;
+  max-width: 320px;
+  z-index: 1001;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.9);
+  transition: all var(--transition-fast);
+}
+
+.event-modal.active {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.event-modal-header {
+  background: linear-gradient(135deg, var(--color-accent-red) 0%, #b91c1c 100%);
+  padding: 15px 20px;
+  border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.event-modal-date {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.9;
+  color: white;
+}
+
+.event-modal-close {
+  width: 28px;
+  height: 28px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: var(--transition-fast);
+}
+
+.event-modal-close:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.event-modal-close svg {
+  width: 14px;
+  height: 14px;
+  fill: white;
+}
+
+.event-modal-body {
+  padding: 20px;
+}
+
+.event-modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--color-gold);
+}
+
+.event-modal-content {
+  font-size: 14px;
+  color: var(--color-text-light);
+  line-height: 1.6;
+}
+
+.event-modal-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 13px;
+  color: var(--color-text-light);
+}
+
+.event-modal-time svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--color-gold);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .calendar-section {
+    width: 280px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .calendar-section {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .calendar {
+    padding: 20px;
+  }
+
+  .calendar-month {
+    font-size: 1.2rem;
+  }
+
+  .calendar-day {
+    padding: 8px 3px;
+    font-size: 12px;
+  }
+
+  .event-modal {
+    left: 10px !important;
+    right: 10px !important;
+    max-width: none;
+    min-width: auto;
+  }
+}
+</style>
+
+<script>
+const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+               'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+function initCalendar() {
+  const calendarDays = document.querySelectorAll('.calendar-day.has-event');
+  const eventModal = document.getElementById('eventModal');
+  const closeModalBtn = document.getElementById('closeEventModal');
+
+  calendarDays.forEach(day => {
+    day.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const dayNum = target.dataset.day;
+      const eventData = target.dataset.event;
+
+      if (eventData && dayNum) {
+        const event = JSON.parse(eventData);
+        showEventModal(parseInt(dayNum), event, e as MouseEvent);
+      }
+    });
+  });
+
+  closeModalBtn?.addEventListener('click', closeEventModal);
+
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (eventModal?.classList.contains('active')) {
+      if (!eventModal.contains(target) && !target.classList.contains('has-event')) {
+        closeEventModal();
+      }
+    }
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeEventModal();
+    }
+  });
+}
+
+function showEventModal(day: number, event: { title: string; content: string; time: string }, e: MouseEvent) {
+  const modal = document.getElementById('eventModal');
+  if (!modal) return;
+
+  const dateEl = document.getElementById('eventModalDate');
+  const titleEl = document.getElementById('eventModalTitle');
+  const contentEl = document.getElementById('eventModalContent');
+  const timeTextEl = document.getElementById('eventModalTimeText');
+
+  if (dateEl) dateEl.textContent = `${day} de ${months[0]} 2025`;
+  if (titleEl) titleEl.textContent = event.title;
+  if (contentEl) contentEl.textContent = event.content;
+  if (timeTextEl) timeTextEl.textContent = event.time;
+
+  // Position the modal
+  const rect = (e.target as HTMLElement).getBoundingClientRect();
+  const modalWidth = 300;
+  const modalHeight = 200;
+
+  let left = rect.left + window.scrollX;
+  let top = rect.bottom + window.scrollY + 10;
+
+  if (left + modalWidth > window.innerWidth - 20) {
+    left = window.innerWidth - modalWidth - 20;
+  }
+
+  if (top + modalHeight > window.innerHeight + window.scrollY - 20) {
+    top = rect.top + window.scrollY - modalHeight - 10;
+  }
+
+  if (left < 20) left = 20;
+
+  modal.style.left = `${left}px`;
+  modal.style.top = `${top}px`;
+  modal.classList.add('active');
+}
+
+function closeEventModal() {
+  const modal = document.getElementById('eventModal');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initCalendar);
+</script>

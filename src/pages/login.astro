@@ -1,0 +1,1178 @@
+---
+import AuthLayout from '../layouts/AuthLayout.astro';
+import companiesData from '../data/companies.json';
+
+// Check if already logged in
+const sessionCookie = Astro.cookies.get('session')?.value;
+if (sessionCookie) {
+  try {
+    const session = JSON.parse(decodeURIComponent(sessionCookie));
+    if (session.expiresAt > Date.now()) {
+      return Astro.redirect('/');
+    }
+  } catch {
+    // Invalid cookie, continue to login
+  }
+}
+
+const companies = companiesData;
+---
+
+<AuthLayout title="Iniciar Sesión - Panel Empresarial">
+  <!-- LOGIN CONTAINER -->
+  <div class="login-container">
+    <div class="login-card">
+      <!-- LOGIN HEADER -->
+      <div class="login-header">
+        <div class="login-logo">
+          <span class="login-logo-text">LOGO<br>EMPRESA</span>
+        </div>
+        <h1 class="login-title">Bienvenido</h1>
+        <p class="login-subtitle">Ingresa tus credenciales para continuar</p>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form class="login-form" id="loginForm">
+        <!-- Company Field (Select2 Style) -->
+        <div class="form-group">
+          <label class="form-label" for="company">Compañía</label>
+          <div class="select2-container" id="companySelect">
+            <div class="select2-selection" id="companySelection">
+              <span class="select2-selection-text placeholder" id="companySelectionText">Selecciona una compañía</span>
+              <svg class="select2-arrow" viewBox="0 0 24 24">
+                <path d="M7 10l5 5 5-5z"/>
+              </svg>
+            </div>
+            <div class="select2-dropdown" id="companyDropdown">
+              <div class="select2-search">
+                <input type="text" class="select2-search-input" id="companySearch" placeholder="Buscar compañía..." autocomplete="off">
+                <svg viewBox="0 0 24 24">
+                  <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+              </div>
+              <div class="select2-results" id="companyResults">
+                {companies.map(company => (
+                  <div class="select2-result" data-id={company.id}>{company.nombre}</div>
+                ))}
+              </div>
+            </div>
+            <input type="hidden" id="companyId" name="companyId">
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-group">
+          <label class="form-label" for="email">Correo Electrónico</label>
+          <div class="form-input-wrapper">
+            <input
+              type="email"
+              id="email"
+              class="form-input"
+              placeholder="tu.correo@empresa.com"
+              autocomplete="email"
+            >
+            <svg viewBox="0 0 24 24">
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+          <label class="form-label" for="password">Contraseña</label>
+          <div class="form-input-wrapper">
+            <input
+              type="password"
+              id="password"
+              class="form-input"
+              placeholder="••••••••"
+              autocomplete="current-password"
+            >
+            <svg viewBox="0 0 24 24">
+              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+            </svg>
+            <button type="button" class="password-toggle" id="passwordToggle">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Form Options -->
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" id="rememberMe">
+            <span class="checkbox-custom">
+              <svg viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+            </span>
+            <span>Recordarme</span>
+          </label>
+          <a href="#" class="forgot-password" id="forgotPasswordLink">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="login-btn" id="loginBtn">
+          <span class="btn-text">Iniciar Sesión</span>
+          <span class="btn-loader">
+            <span class="loader"></span>
+          </span>
+        </button>
+      </form>
+
+      <!-- LOGIN FOOTER -->
+      <div class="login-footer">
+        <p>© 2025 Empresa. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSWORD RESET MODAL -->
+  <div class="modal-overlay" id="passwordResetModal">
+    <div class="modal password-reset-modal">
+      <div class="modal-header">
+        <h2 class="modal-title">
+          <div class="modal-title-icon">
+            <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+          </div>
+          Recuperar Contraseña
+        </h2>
+        <button class="modal-close" id="closePasswordResetModal">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="password-reset-description">
+          Ingresa tu correo electrónico y un administrador se pondrá en contacto contigo para restablecer tu contraseña.
+        </p>
+        <form class="password-reset-form" id="passwordResetForm">
+          <div class="form-group">
+            <label class="form-label" for="resetEmail">Correo Electrónico</label>
+            <div class="form-input-wrapper">
+              <input
+                type="email"
+                id="resetEmail"
+                class="form-input"
+                placeholder="tu.correo@empresa.com"
+                autocomplete="email"
+              >
+              <svg viewBox="0 0 24 24">
+                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+              </svg>
+            </div>
+            <span class="form-error-message" id="resetEmailError"></span>
+          </div>
+          <button type="submit" class="password-reset-btn" id="passwordResetBtn" disabled>
+            <span class="btn-text">Solicitar Recuperación</span>
+            <span class="btn-loader">
+              <span class="loader"></span>
+            </span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</AuthLayout>
+
+<style>
+/* Login Container */
+.login-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  padding: 20px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.login-card {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+  animation: slideUp 0.6s ease-out;
+  width: 100%;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Login Header */
+.login-header {
+  background: linear-gradient(135deg, var(--color-module-bg) 0%, #2563eb 100%);
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.login-logo {
+  width: 80px;
+  height: 80px;
+  border: 3px solid var(--color-text-white);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1e3a5f 0%, #0d1b4c 100%);
+}
+
+.login-logo-text {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.login-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: var(--color-text-light);
+  opacity: 0.8;
+}
+
+/* Login Form */
+.login-form {
+  padding: 35px 30px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--color-text-light);
+}
+
+.form-input-wrapper {
+  position: relative;
+}
+
+.form-input-wrapper > svg {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  fill: rgba(255, 255, 255, 0.4);
+  transition: var(--transition-fast);
+}
+
+.form-input {
+  width: 100%;
+  padding: 16px 16px 16px 50px;
+  background-color: var(--color-module-bg);
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-md);
+  color: var(--color-text-white);
+  font-family: inherit;
+  font-size: 14px;
+  transition: var(--transition-fast);
+}
+
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+}
+
+.form-input:focus + svg {
+  fill: var(--color-gold);
+}
+
+.form-input.error {
+  border-color: var(--color-error);
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-8px); }
+  80% { transform: translateX(8px); }
+}
+
+/* Password Toggle */
+.password-toggle {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle svg {
+  position: static;
+  transform: none;
+  width: 20px;
+  height: 20px;
+  fill: rgba(255, 255, 255, 0.4);
+  transition: var(--transition-fast);
+}
+
+.password-toggle:hover svg {
+  fill: var(--color-gold);
+}
+
+/* Select2 Dropdown */
+.select2-container {
+  position: relative;
+  width: 100%;
+}
+
+.select2-selection {
+  width: 100%;
+  padding: 16px 50px 16px 16px;
+  background-color: var(--color-module-bg);
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-md);
+  color: var(--color-text-white);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 54px;
+}
+
+.select2-selection:hover {
+  border-color: rgba(201, 162, 39, 0.3);
+}
+
+.select2-container.active .select2-selection {
+  border-color: var(--color-gold);
+  border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+}
+
+.select2-selection-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.select2-selection-text.placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.select2-arrow {
+  width: 20px;
+  height: 20px;
+  fill: rgba(255, 255, 255, 0.4);
+  transition: var(--transition-fast);
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
+.select2-container.active .select2-arrow {
+  transform: rotate(180deg);
+  fill: var(--color-gold);
+}
+
+.select2-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--color-module-bg);
+  border: 2px solid var(--color-gold);
+  border-top: none;
+  border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all var(--transition-fast);
+  max-height: 0;
+  overflow: hidden;
+}
+
+.select2-container.active .select2-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  max-height: 300px;
+}
+
+.select2-search {
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.select2-search-input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-text-white);
+  font-family: inherit;
+  font-size: 13px;
+  transition: var(--transition-fast);
+}
+
+.select2-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.select2-search-input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.select2-search svg {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  fill: rgba(255, 255, 255, 0.4);
+}
+
+.select2-results {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.select2-result {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  font-size: 14px;
+  color: var(--color-text-light);
+}
+
+.select2-result:hover,
+.select2-result.highlighted {
+  background-color: rgba(201, 162, 39, 0.15);
+  color: var(--color-text-white);
+}
+
+.select2-result.selected {
+  background-color: rgba(201, 162, 39, 0.25);
+  color: var(--color-gold);
+}
+
+.select2-no-results {
+  padding: 16px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+}
+
+/* Form Options */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.remember-me input {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: var(--transition-fast);
+}
+
+.remember-me input:checked + .checkbox-custom {
+  background-color: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+.checkbox-custom svg {
+  width: 12px;
+  height: 12px;
+  fill: white;
+  opacity: 0;
+  transform: scale(0);
+  transition: var(--transition-fast);
+}
+
+.remember-me input:checked + .checkbox-custom svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.remember-me span {
+  font-size: 13px;
+  color: var(--color-text-light);
+}
+
+.forgot-password {
+  font-size: 13px;
+  color: var(--color-gold);
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+
+.forgot-password:hover {
+  color: var(--color-accent-orange);
+  text-decoration: underline;
+}
+
+/* Submit Button */
+.login-btn,
+.password-reset-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-accent-orange) 100%);
+  border: none;
+  border-radius: var(--border-radius-md);
+  color: white;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-btn:hover,
+.password-reset-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(201, 162, 39, 0.4);
+}
+
+.login-btn:disabled,
+.password-reset-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-text {
+  transition: var(--transition-fast);
+}
+
+.btn-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.login-btn.loading .btn-text,
+.password-reset-btn.loading .btn-text {
+  opacity: 0;
+}
+
+.login-btn.loading .btn-loader,
+.password-reset-btn.loading .btn-loader {
+  opacity: 1;
+  visibility: visible;
+}
+
+.loader {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Login Footer */
+.login-footer {
+  padding: 20px 30px 30px;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.login-footer p {
+  font-size: 13px;
+  color: var(--color-text-light);
+  opacity: 0.7;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(10, 23, 68, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-normal);
+  padding: 20px;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--border-radius-lg);
+  width: 100%;
+  max-width: 450px;
+  overflow: hidden;
+  transform: scale(0.9) translateY(20px);
+  transition: transform var(--transition-normal);
+}
+
+.modal-overlay.active .modal {
+  transform: scale(1) translateY(0);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, var(--color-module-bg) 0%, #2563eb 100%);
+  padding: 25px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.modal-title-icon {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-title-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: var(--color-gold);
+}
+
+.modal-close {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: var(--transition-fast);
+}
+
+.modal-close:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.modal-close svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--color-text-white);
+}
+
+.modal-body {
+  padding: 30px;
+}
+
+.password-reset-description {
+  font-size: 14px;
+  color: var(--color-text-light);
+  line-height: 1.6;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.form-error-message {
+  display: block;
+  font-size: 12px;
+  color: var(--color-error);
+  margin-top: 8px;
+  min-height: 18px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 15px;
+  }
+
+  .login-header {
+    padding: 30px 20px;
+  }
+
+  .login-logo {
+    width: 70px;
+    height: 70px;
+  }
+
+  .login-title {
+    font-size: 1.5rem;
+  }
+
+  .login-form {
+    padding: 25px 20px;
+  }
+
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+</style>
+
+<script>
+// Demo credentials
+const DEMO_CREDENTIALS = {
+  email: 'usuario@empresa.com',
+  password: 'password123'
+};
+
+// Alert System
+class AlertSystem {
+  private container: HTMLElement | null;
+
+  constructor() {
+    this.container = document.getElementById('alertContainer');
+  }
+
+  show(type: 'error' | 'success' | 'warning', title: string, message: string, duration = 3000): number {
+    const alertId = Date.now();
+    const alert = this.createAlert(alertId, type, title, message);
+    this.container?.appendChild(alert);
+
+    setTimeout(() => this.hide(alertId), duration);
+    return alertId;
+  }
+
+  private createAlert(id: number, type: string, title: string, message: string): HTMLElement {
+    const icons: Record<string, string> = {
+      error: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>',
+      success: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
+      warning: '<path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>'
+    };
+
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type}`;
+    alert.dataset.alertId = id.toString();
+    alert.innerHTML = `
+      <div class="alert-icon"><svg viewBox="0 0 24 24">${icons[type]}</svg></div>
+      <div class="alert-content">
+        <div class="alert-title">${title}</div>
+        <div class="alert-message">${message}</div>
+      </div>
+      <button class="alert-close">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+      <div class="alert-progress"></div>
+    `;
+
+    alert.querySelector('.alert-close')?.addEventListener('click', () => this.hide(id));
+    return alert;
+  }
+
+  hide(id: number): void {
+    const alert = document.querySelector(`[data-alert-id="${id}"]`);
+    if (!alert) return;
+
+    alert.classList.add('hiding');
+    setTimeout(() => alert.remove(), 300);
+  }
+
+  error(title: string, message: string) { return this.show('error', title, message); }
+  success(title: string, message: string) { return this.show('success', title, message); }
+  warning(title: string, message: string, duration = 5000) { return this.show('warning', title, message, duration); }
+}
+
+let alertSystem: AlertSystem;
+
+// Select2 Custom
+class Select2Custom {
+  private container: HTMLElement | null;
+  private selection: HTMLElement | null;
+  private selectionText: HTMLElement | null;
+  private dropdown: HTMLElement | null;
+  private searchInput: HTMLInputElement | null;
+  private resultsContainer: HTMLElement | null;
+  private hiddenInput: HTMLInputElement | null;
+  private selectedValue: number | null = null;
+  private isOpen = false;
+  private highlightedIndex = -1;
+  private filteredData: { id: number; nombre: string }[] = [];
+  private data: { id: number; nombre: string }[];
+
+  constructor(containerId: string, data: { id: number; nombre: string }[]) {
+    this.container = document.getElementById(containerId);
+    this.data = data;
+    this.filteredData = [...data];
+
+    if (this.container) {
+      this.selection = this.container.querySelector('.select2-selection');
+      this.selectionText = this.container.querySelector('.select2-selection-text');
+      this.dropdown = this.container.querySelector('.select2-dropdown');
+      this.searchInput = this.container.querySelector('.select2-search-input');
+      this.resultsContainer = this.container.querySelector('.select2-results');
+      this.hiddenInput = this.container.querySelector('input[type="hidden"]');
+
+      this.bindEvents();
+    }
+  }
+
+  private bindEvents(): void {
+    this.selection?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggle();
+    });
+
+    this.searchInput?.addEventListener('input', (e) => {
+      this.filterOptions((e.target as HTMLInputElement).value);
+    });
+
+    this.dropdown?.addEventListener('click', (e) => e.stopPropagation());
+
+    this.searchInput?.addEventListener('keydown', (e) => this.handleKeydown(e));
+
+    document.addEventListener('click', () => this.close());
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.isOpen) this.close();
+    });
+  }
+
+  toggle(): void {
+    this.isOpen ? this.close() : this.open();
+  }
+
+  open(): void {
+    this.isOpen = true;
+    this.container?.classList.add('active');
+    if (this.searchInput) {
+      this.searchInput.value = '';
+      this.filterOptions('');
+      setTimeout(() => this.searchInput?.focus(), 100);
+    }
+  }
+
+  close(): void {
+    this.isOpen = false;
+    this.container?.classList.remove('active');
+    this.highlightedIndex = -1;
+  }
+
+  private filterOptions(term: string): void {
+    const search = term.toLowerCase().trim();
+    this.filteredData = search
+      ? this.data.filter(item => item.nombre.toLowerCase().includes(search))
+      : [...this.data];
+    this.renderOptions();
+    this.highlightedIndex = -1;
+  }
+
+  private renderOptions(): void {
+    if (!this.resultsContainer) return;
+
+    if (this.filteredData.length === 0) {
+      this.resultsContainer.innerHTML = '<div class="select2-no-results">No se encontraron resultados</div>';
+      return;
+    }
+
+    this.resultsContainer.innerHTML = this.filteredData.map((item, index) => `
+      <div class="select2-result ${this.selectedValue === item.id ? 'selected' : ''}"
+           data-id="${item.id}" data-index="${index}">${item.nombre}</div>
+    `).join('');
+
+    this.resultsContainer.querySelectorAll('.select2-result').forEach(result => {
+      result.addEventListener('click', () => {
+        const id = parseInt((result as HTMLElement).dataset.id || '0');
+        const item = this.data.find(i => i.id === id);
+        if (item) this.select(item);
+      });
+      result.addEventListener('mouseenter', () => {
+        this.highlightedIndex = parseInt((result as HTMLElement).dataset.index || '0');
+        this.updateHighlight();
+      });
+    });
+  }
+
+  private select(item: { id: number; nombre: string }): void {
+    this.selectedValue = item.id;
+    if (this.selectionText) {
+      this.selectionText.textContent = item.nombre;
+      this.selectionText.classList.remove('placeholder');
+    }
+    if (this.hiddenInput) this.hiddenInput.value = item.id.toString();
+    this.close();
+    this.renderOptions();
+  }
+
+  private handleKeydown(e: KeyboardEvent): void {
+    const results = this.resultsContainer?.querySelectorAll('.select2-result');
+    if (!results) return;
+
+    if (e.key === 'ArrowDown' && this.highlightedIndex < results.length - 1) {
+      e.preventDefault();
+      this.highlightedIndex++;
+      this.updateHighlight();
+    } else if (e.key === 'ArrowUp' && this.highlightedIndex > 0) {
+      e.preventDefault();
+      this.highlightedIndex--;
+      this.updateHighlight();
+    } else if (e.key === 'Enter' && this.highlightedIndex >= 0 && this.filteredData[this.highlightedIndex]) {
+      e.preventDefault();
+      this.select(this.filteredData[this.highlightedIndex]);
+    }
+  }
+
+  private updateHighlight(): void {
+    this.resultsContainer?.querySelectorAll('.select2-result').forEach((result, index) => {
+      result.classList.toggle('highlighted', index === this.highlightedIndex);
+    });
+  }
+}
+
+// Form handling
+function initLogin(): void {
+  alertSystem = new AlertSystem();
+
+  // Initialize company select
+  const companies = Array.from(document.querySelectorAll('#companyResults .select2-result')).map(el => ({
+    id: parseInt(el.getAttribute('data-id') || '0'),
+    nombre: el.textContent || ''
+  }));
+  new Select2Custom('companySelect', companies);
+
+  // Form submit
+  const loginForm = document.getElementById('loginForm');
+  const loginBtn = document.getElementById('loginBtn');
+  const emailInput = document.getElementById('email') as HTMLInputElement;
+  const passwordInput = document.getElementById('password') as HTMLInputElement;
+
+  loginForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    // Validation
+    if (!email) {
+      emailInput.classList.add('error');
+      alertSystem.error('Campo requerido', 'Por favor ingresa tu correo electrónico');
+      emailInput.focus();
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      emailInput.classList.add('error');
+      alertSystem.error('Correo inválido', 'Por favor ingresa un correo electrónico válido');
+      emailInput.focus();
+      return;
+    }
+
+    if (!password || password.length < 6) {
+      passwordInput.classList.add('error');
+      alertSystem.error('Contraseña inválida', 'La contraseña debe tener al menos 6 caracteres');
+      passwordInput.focus();
+      return;
+    }
+
+    // Show loading
+    loginBtn?.classList.add('loading');
+    (loginBtn as HTMLButtonElement).disabled = true;
+
+    try {
+      // Call GraphQL mutation
+      const response = await fetch('/api/graphql', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: `
+            mutation Login($email: String!, $password: String!) {
+              login(email: $email, password: $password) {
+                success
+                message
+                user { id email nombre companyId }
+                token
+              }
+            }
+          `,
+          variables: { email, password }
+        })
+      });
+
+      const result = await response.json();
+      const loginResult = result.data?.login;
+
+      if (loginResult?.success) {
+        // Save session to cookie
+        const session = {
+          user: loginResult.user,
+          token: loginResult.token,
+          expiresAt: Date.now() + (60 * 60 * 1000)
+        };
+        document.cookie = `session=${encodeURIComponent(JSON.stringify(session))}; path=/; max-age=3600`;
+
+        alertSystem.success('¡Bienvenido!', 'Inicio de sesión exitoso. Redirigiendo...');
+        setTimeout(() => window.location.href = '/', 1500);
+      } else {
+        alertSystem.error('Error de autenticación', loginResult?.message || 'Credenciales incorrectas');
+        emailInput.classList.add('error');
+        passwordInput.classList.add('error');
+      }
+    } catch (error) {
+      alertSystem.error('Error', 'No se pudo conectar con el servidor');
+    } finally {
+      loginBtn?.classList.remove('loading');
+      (loginBtn as HTMLButtonElement).disabled = false;
+    }
+  });
+
+  // Clear errors on input
+  emailInput?.addEventListener('input', () => emailInput.classList.remove('error'));
+  passwordInput?.addEventListener('input', () => passwordInput.classList.remove('error'));
+
+  // Password toggle
+  const passwordToggle = document.getElementById('passwordToggle');
+  passwordToggle?.addEventListener('click', () => {
+    const type = passwordInput.type === 'password' ? 'text' : 'password';
+    passwordInput.type = type;
+    passwordToggle.innerHTML = type === 'password'
+      ? '<svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>'
+      : '<svg viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>';
+  });
+
+  // Password reset modal
+  const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+  const passwordResetModal = document.getElementById('passwordResetModal');
+  const closePasswordResetModal = document.getElementById('closePasswordResetModal');
+  const resetEmailInput = document.getElementById('resetEmail') as HTMLInputElement;
+  const resetEmailError = document.getElementById('resetEmailError');
+  const passwordResetBtn = document.getElementById('passwordResetBtn');
+  const passwordResetForm = document.getElementById('passwordResetForm');
+
+  forgotPasswordLink?.addEventListener('click', (e) => {
+    e.preventDefault();
+    passwordResetModal?.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => resetEmailInput?.focus(), 300);
+  });
+
+  closePasswordResetModal?.addEventListener('click', () => {
+    passwordResetModal?.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+
+  passwordResetModal?.addEventListener('click', (e) => {
+    if (e.target === passwordResetModal) {
+      passwordResetModal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+  resetEmailInput?.addEventListener('input', () => {
+    const email = resetEmailInput.value.trim();
+    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (resetEmailError) resetEmailError.textContent = email && !isValid ? 'Por favor ingresa un correo válido' : '';
+    if (passwordResetBtn) (passwordResetBtn as HTMLButtonElement).disabled = !isValid;
+  });
+
+  passwordResetForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = resetEmailInput.value.trim();
+
+    passwordResetBtn?.classList.add('loading');
+    (passwordResetBtn as HTMLButtonElement).disabled = true;
+
+    try {
+      await fetch('/api/graphql', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: 'mutation RequestPasswordReset($email: String!) { requestPasswordReset(email: $email) }',
+          variables: { email }
+        })
+      });
+
+      passwordResetModal?.classList.remove('active');
+      document.body.style.overflow = '';
+      alertSystem.success('Solicitud enviada', 'Un administrador se pondrá en contacto contigo.');
+    } finally {
+      passwordResetBtn?.classList.remove('loading');
+      (passwordResetBtn as HTMLButtonElement).disabled = false;
+    }
+  });
+
+  // Show demo credentials
+  setTimeout(() => {
+    alertSystem.warning('Credenciales de prueba', `Email: ${DEMO_CREDENTIALS.email} | Password: ${DEMO_CREDENTIALS.password}`);
+  }, 2000);
+}
+
+document.addEventListener('DOMContentLoaded', initLogin);
+</script>

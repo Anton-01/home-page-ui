@@ -1,0 +1,129 @@
+---
+import DashboardLayout from '../layouts/DashboardLayout.astro';
+import Banner from '../components/Banner.astro';
+import NewsTicker from '../components/NewsTicker.astro';
+import ModulesGrid from '../components/ModulesGrid.astro';
+import Calendar from '../components/Calendar.astro';
+import ContactsModal from '../components/ContactsModal.astro';
+
+// Import static data with caching through GraphQL resolvers
+import { cache, CACHE_KEYS, CACHE_TTL } from '../lib/cache';
+import modulesData from '../data/modules.json';
+import contactsData from '../data/contacts.json';
+import eventsData from '../data/events.json';
+import newsData from '../data/news.json';
+import { getInitials, getAvatarColor } from '../data/icons';
+
+// Check authentication
+const sessionCookie = Astro.cookies.get('session')?.value;
+let isAuthenticated = false;
+let user = null;
+
+if (sessionCookie) {
+  try {
+    const session = JSON.parse(decodeURIComponent(sessionCookie));
+    if (session.expiresAt > Date.now()) {
+      isAuthenticated = true;
+      user = session.user;
+    }
+  } catch {
+    // Invalid cookie
+  }
+}
+
+// Redirect to login if not authenticated
+if (!isAuthenticated) {
+  return Astro.redirect('/login');
+}
+
+// Load data (using cache)
+const modules = await cache.getOrSet(
+  CACHE_KEYS.MODULES,
+  () => modulesData,
+  CACHE_TTL.LONG
+);
+
+const contacts = await cache.getOrSet(
+  CACHE_KEYS.CONTACTS,
+  () => contactsData.map(contact => ({
+    ...contact,
+    initials: getInitials(contact.nombre),
+    avatarColor: getAvatarColor(contact.nombre)
+  })),
+  CACHE_TTL.LONG
+);
+
+const events = await cache.getOrSet(
+  CACHE_KEYS.EVENTS,
+  () => eventsData,
+  CACHE_TTL.LONG
+);
+
+const newsItems = await cache.getOrSet(
+  CACHE_KEYS.NEWS,
+  () => newsData,
+  CACHE_TTL.MEDIUM
+);
+---
+
+<DashboardLayout title="Panel de Comunicación Efectiva">
+  <!-- Banner -->
+  <Banner />
+
+  <!-- News Ticker -->
+  <NewsTicker items={newsItems} />
+
+  <!-- Bottom Section: Modules + Calendar -->
+  <div class="bottom-section">
+    <ModulesGrid modules={modules} />
+    <Calendar events={events} />
+  </div>
+
+  <!-- Modals -->
+  <ContactsModal contacts={contacts} />
+</DashboardLayout>
+
+<style>
+.bottom-section {
+  display: flex;
+  gap: 25px;
+  flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .bottom-section {
+    flex-direction: column;
+  }
+}
+</style>
+
+<script>
+// Logout function (can be called from anywhere)
+(window as any).logout = function() {
+  document.cookie = 'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  window.location.href = '/login';
+};
+
+// Optional: Auto-logout on session expiry
+function checkSession() {
+  const cookies = document.cookie.split(';');
+  const sessionCookie = cookies.find(c => c.trim().startsWith('session='));
+
+  if (sessionCookie) {
+    try {
+      const sessionValue = sessionCookie.split('=')[1];
+      const session = JSON.parse(decodeURIComponent(sessionValue));
+
+      if (session.expiresAt < Date.now()) {
+        (window as any).logout();
+      }
+    } catch {
+      // Invalid cookie
+    }
+  }
+}
+
+// Check session every minute
+setInterval(checkSession, 60000);
+</script>

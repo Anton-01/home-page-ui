@@ -1,0 +1,23 @@
+{
+  "name": "home-page-ui",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Panel de Comunicación Empresarial - Astro + GraphQL",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.10.0",
+    "astro": "^4.0.7",
+    "graphql": "^16.8.1",
+    "graphql-tag": "^2.12.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "typescript": "^5.3.3"
+  }
+}
