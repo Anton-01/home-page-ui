@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
+  site: 'home-page-ui.github.io'
   output: 'server',
   server: {
     port: 4321,
