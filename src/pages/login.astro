@@ -35,17 +35,17 @@ const companies = companiesData;
       <form class="login-form" id="loginForm">
         <!-- Company Field (Select2 Style) -->
         <div class="form-group">
-          <label class="form-label" for="company">Compañía</label>
+          <label class="form-label" for="company">Empresa</label>
           <div class="select2-container" id="companySelect">
             <div class="select2-selection" id="companySelection">
-              <span class="select2-selection-text placeholder" id="companySelectionText">Selecciona una compañía</span>
+              <span class="select2-selection-text placeholder" id="companySelectionText">Selecciona una empresa</span>
               <svg class="select2-arrow" viewBox="0 0 24 24">
                 <path d="M7 10l5 5 5-5z"/>
               </svg>
             </div>
             <div class="select2-dropdown" id="companyDropdown">
               <div class="select2-search">
-                <input type="text" class="select2-search-input" id="companySearch" placeholder="Buscar compañía..." autocomplete="off">
+                <input type="text" class="select2-search-input" id="companySearch" placeholder="Buscar empresa..." autocomplete="off">
                 <svg viewBox="0 0 24 24">
                   <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
                 </svg>
@@ -176,7 +176,7 @@ const companies = companiesData;
   </div>
 </AuthLayout>
 
-<style>
+<style is:global>
 /* Login Container */
 .login-container {
   position: relative;
@@ -497,6 +497,16 @@ const companies = companiesData;
   font-size: 13px;
 }
 
+/* Select2 Error State */
+.select2-container.error .select2-selection {
+  border-color: var(--color-error);
+  animation: shake 0.4s ease;
+}
+
+.select2-container.error .select2-arrow {
+  fill: var(--color-error);
+}
+
 /* Form Options */
 .form-options {
   display: flex;
@@ -790,12 +800,6 @@ const companies = companiesData;
 </style>
 
 <script>
-// Demo credentials
-const DEMO_CREDENTIALS = {
-  email: 'usuario@empresa.com',
-  password: 'password123'
-};
-
 // Alert System
 class AlertSystem {
   private container: HTMLElement | null;
@@ -1167,11 +1171,6 @@ function initLogin(): void {
       (passwordResetBtn as HTMLButtonElement).disabled = false;
     }
   });
-
-  // Show demo credentials
-  setTimeout(() => {
-    alertSystem.warning('Credenciales de prueba', `Email: ${DEMO_CREDENTIALS.email} | Password: ${DEMO_CREDENTIALS.password}`);
-  }, 2000);
 }
 
 document.addEventListener('DOMContentLoaded', initLogin);

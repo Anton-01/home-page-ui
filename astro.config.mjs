@@ -8,7 +8,7 @@ export default defineConfig({
   },
   vite: {
     ssr: {
-      noExternal: ['@apollo/client', 'graphql']
+      noExternal: ['graphql', 'graphql-yoga']
     }
   }
 });
