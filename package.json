@@ -11,8 +11,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/vercel": "^7.8.2",
-    "astro": "^4.16.19",
+    "@astrojs/vercel": "^9.0.2",
+    "astro": "^5.16.6",
     "graphql": "^16.8.1",
     "graphql-yoga": "^5.1.1"
   },
