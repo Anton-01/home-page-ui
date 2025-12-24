@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://Anton-01.github.io'
-  output: 'server',
+  site: 'https://Anton-01.github.io',
+  //output: 'server',
   server: {
     port: 4321,
     host: true
