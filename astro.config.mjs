@@ -2,7 +2,8 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   site: 'https://Anton-01.github.io',
-  //output: 'server',
+  output: 'server',
+  adapter: vercel(),
   server: {
     port: 4321,
     host: true
