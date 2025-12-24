@@ -48,7 +48,7 @@ home-page-ui/
 
 1. Clona el repositorio:
 ```bash
-git clone https://github.com/Memory-Jehu/home-page-ui.git
+git clone https://github.com/Anton-01/home-page-ui.git
 ```
 
 2. Abre el proyecto en tu editor de código favorito
