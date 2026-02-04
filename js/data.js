@@ -1,384 +1,78 @@
 // ============================================
-// DATA - MODULES JSON
+// DATA LAYER - Fetches data from real backend
+// Integration with https://marks-test.com/graphql
 // ============================================
-const modulesData = [
-    {
-        id: "email",
-        label: "Email",
-        type: "link",
-        url: "https://mail.empresa.com",
-        target: "_blank",
-        icon: "email",
-        highlight: null
-    },
-    {
-        id: "contactos",
-        label: "Contactos",
-        type: "modal",
-        modalId: "contactsModal",
-        icon: "contacts",
-        highlight: null
-    },
-    {
-        id: "crm",
-        label: "CRM",
-        type: "link",
-        url: "#crm",
-        target: "_blank",
-        icon: "crm",
-        highlight: null
-    },
-    {
-        id: "capacitacion",
-        label: "Capacitación",
-        type: "link",
-        url: "#capacitacion",
-        target: "_blank",
-        icon: "education",
-        highlight: null
-    },
-    {
-        id: "vacaciones",
-        label: "Solicitud de Vacaciones",
-        type: "link",
-        url: "#vacaciones",
-        target: "_blank",
-        icon: "calendar",
-        highlight: null
-    },
-    {
-        id: "indicadores",
-        label: "Indicadores",
-        type: "link",
-        url: "#indicadores",
-        target: "_blank",
-        icon: "chart",
-        highlight: null
-    },
-    {
-        id: "reportes-seguridad",
-        label: "Reportes Seguridad",
-        type: "link",
-        url: "#reportes-seguridad",
-        target: "_blank",
-        icon: "alert",
-        highlight: "red"
-    },
-    {
-        id: "procedimientos",
-        label: "Procedimientos",
-        type: "link",
-        url: "#procedimientos",
-        target: "_blank",
-        icon: "document",
-        highlight: null
-    },
-    {
-        id: "planeacion",
-        label: "Planeación",
-        type: "link",
-        url: "#planeacion",
-        target: "_blank",
-        icon: "planning",
-        highlight: null
-    },
-    {
-        id: "finanzas",
-        label: "Finanzas",
-        type: "link",
-        url: "#finanzas",
-        target: "_blank",
-        icon: "finance",
-        highlight: null
-    },
-    {
-        id: "seguridad-higiene",
-        label: "Seguridad e Higiene",
-        type: "link",
-        url: "#seguridad-higiene",
-        target: "_blank",
-        icon: "shield",
-        highlight: null
-    },
-    {
-        id: "solicitud-epp",
-        label: "Solicitud EPP",
-        type: "link",
-        url: "#solicitud-epp",
-        target: "_blank",
-        icon: "epp",
-        highlight: null
-    },
-    {
-        id: "inventarios",
-        label: "Inventarios",
-        type: "link",
-        url: "#inventarios",
-        target: "_blank",
-        icon: "inventory",
-        highlight: null
-    },
-    {
-        id: "facturacion",
-        label: "Facturación",
-        type: "link",
-        url: "#facturacion",
-        target: "_blank",
-        icon: "invoice",
-        highlight: null
-    },
-    {
-        id: "almacen",
-        label: "Almacén",
-        type: "link",
-        url: "#almacen",
-        target: "_blank",
-        icon: "warehouse",
-        highlight: null
-    },
-    {
-        id: "reporte-ventas",
-        label: "Reporte ventas",
-        type: "link",
-        url: "#reporte-ventas",
-        target: "_blank",
-        icon: "sales",
-        highlight: null
-    },
-    {
-        id: "solicitud-compras",
-        label: "Solicitud Compras",
-        type: "link",
-        url: "#solicitud-compras",
-        target: "_blank",
-        icon: "purchase",
-        highlight: null
-    },
-    {
-        id: "seguridad-higiene-2",
-        label: "Seguridad e Higiene",
-        type: "link",
-        url: "#seguridad-higiene-2",
-        target: "_blank",
-        icon: "settings",
-        highlight: null
-    },
-    {
-        id: "papeleria",
-        label: "Papelería",
-        type: "link",
-        url: "#papeleria",
-        target: "_blank",
-        icon: "stationery",
-        highlight: null
-    },
-    {
-        id: "salas-juntas",
-        label: "Salas de juntas",
-        type: "link",
-        url: "#salas-juntas",
-        target: "_blank",
-        icon: "meeting",
-        highlight: null
-    },
-    {
-        id: "soporte-it",
-        label: "Soporte IT",
-        type: "link",
-        url: "#soporte-it",
-        target: "_blank",
-        icon: "support",
-        highlight: "orange"
-    }
-];
+
+// GraphQL endpoint
+const GRAPHQL_URL = '/api/graphql';
+
+// Data containers (will be loaded from backend)
+let modulesData = [];
+let contactsData = [];
+let calendarEventsData = [];
+let newsTickerData = [];
 
 // ============================================
-// DATA - CONTACTS JSON
+// FETCH ALL DASHBOARD DATA FROM BACKEND
 // ============================================
-const contactsData = [
-    {
-        id: 1,
-        nombre: "María García López",
-        departamento: "Recursos Humanos",
-        email: "maria.garcia@empresa.com",
-        telefono: "55 1234 5678",
-        extension: "101",
-        imagen: null
-    },
-    {
-        id: 2,
-        nombre: "Carlos Rodríguez Mendoza",
-        departamento: "Tecnología de la Información",
-        email: "carlos.rodriguez@empresa.com",
-        telefono: "55 1234 5679",
-        extension: "205",
-        imagen: null
-    },
-    {
-        id: 3,
-        nombre: "Ana Martínez Sánchez",
-        departamento: "Finanzas",
-        email: "ana.martinez@empresa.com",
-        telefono: "55 1234 5680",
-        extension: "302",
-        imagen: null
-    },
-    {
-        id: 4,
-        nombre: "Roberto Hernández Villa",
-        departamento: "Operaciones",
-        email: "roberto.hernandez@empresa.com",
-        telefono: "55 1234 5681",
-        extension: "150",
-        imagen: null
-    },
-    {
-        id: 5,
-        nombre: "Patricia Jiménez Torres",
-        departamento: "Marketing",
-        email: "patricia.jimenez@empresa.com",
-        telefono: "55 1234 5682",
-        extension: "410",
-        imagen: null
-    },
-    {
-        id: 6,
-        nombre: "Fernando López Díaz",
-        departamento: "Ventas",
-        email: "fernando.lopez@empresa.com",
-        telefono: "55 1234 5683",
-        extension: "501",
-        imagen: null
-    },
-    {
-        id: 7,
-        nombre: "Laura Sánchez Moreno",
-        departamento: "Compras",
-        email: "laura.sanchez@empresa.com",
-        telefono: "55 1234 5684",
-        extension: "220",
-        imagen: null
-    },
-    {
-        id: 8,
-        nombre: "Miguel Ángel Ramírez",
-        departamento: "Logística",
-        email: "miguel.ramirez@empresa.com",
-        telefono: "55 1234 5685",
-        extension: "330",
-        imagen: null
-    },
-    {
-        id: 9,
-        nombre: "Gabriela Fernández Castro",
-        departamento: "Calidad",
-        email: "gabriela.fernandez@empresa.com",
-        telefono: "55 1234 5686",
-        extension: "125",
-        imagen: null
-    },
-    {
-        id: 10,
-        nombre: "José Luis Morales Ruiz",
-        departamento: "Producción",
-        email: "jose.morales@empresa.com",
-        telefono: "55 1234 5687",
-        extension: "180",
-        imagen: null
-    },
-    {
-        id: 11,
-        nombre: "Alejandra Vega Núñez",
-        departamento: "Contabilidad",
-        email: "alejandra.vega@empresa.com",
-        telefono: "55 1234 5688",
-        extension: "305",
-        imagen: null
-    },
-    {
-        id: 12,
-        nombre: "Ricardo Peña Salazar",
-        departamento: "Legal",
-        email: "ricardo.pena@empresa.com",
-        telefono: "55 1234 5689",
-        extension: "400",
-        imagen: null
-    }
-];
+async function fetchDashboardData() {
+    try {
+        const response = await fetch(GRAPHQL_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                query: `
+                    query GetDashboardData {
+                        modules {
+                            id
+                            label
+                            type
+                            url
+                            target
+                            modalId
+                            icon
+                            highlight
+                        }
+                        contacts {
+                            id
+                            nombre
+                            departamento
+                            email
+                            telefono
+                            extension
+                            imagen
+                            initials
+                            avatarColor
+                        }
+                        calendarEvents {
+                            day
+                            title
+                            content
+                            time
+                        }
+                        newsItems {
+                            id
+                            text
+                        }
+                    }
+                `
+            })
+        });
+        const result = await response.json();
 
-// ============================================
-// DATA - CALENDAR EVENTS JSON
-// ============================================
-const calendarEventsData = [
-    {
-        day: 6,
-        title: "Junta de Directivos",
-        content: "Reunión mensual para revisar indicadores clave y objetivos del trimestre.",
-        time: "09:00 - 11:00"
-    },
-    {
-        day: 10,
-        title: "Capacitación: Seguridad Industrial",
-        content: "Curso obligatorio para todo el personal del área de producción.",
-        time: "14:00 - 17:00"
-    },
-    {
-        day: 14,
-        title: "Reunión de Planeación",
-        content: "Definición de estrategias y metas para el primer trimestre de 2025.",
-        time: "10:00 - 12:00"
-    },
-    {
-        day: 15,
-        title: "Auditoría Interna",
-        content: "Revisión de procesos y documentación del sistema de gestión de calidad.",
-        time: "08:00 - 13:00"
-    },
-    {
-        day: 20,
-        title: "Día de Integración",
-        content: "Actividades recreativas y de team building para todos los colaboradores.",
-        time: "12:00 - 18:00"
-    },
-    {
-        day: 24,
-        title: "Entrega de Reportes",
-        content: "Fecha límite para entregar reportes mensuales de cada departamento.",
-        time: "Todo el día"
-    },
-    {
-        day: 28,
-        title: "Mantenimiento Programado",
-        content: "Mantenimiento preventivo de equipos de cómputo y servidores.",
-        time: "18:00 - 22:00"
-    }
-];
+        if (result.data) {
+            modulesData = result.data.modules || [];
+            contactsData = result.data.contacts || [];
+            calendarEventsData = result.data.calendarEvents || [];
+            newsTickerData = result.data.newsItems || [];
+        }
 
-// ============================================
-// DATA - NEWS TICKER JSON
-// ============================================
-const newsTickerData = [
-    {
-        id: 1,
-        text: "Recordatorio: La fecha límite para entregar solicitudes de vacaciones es el 20 de enero."
-    },
-    {
-        id: 2,
-        text: "¡Felicidades al equipo de Ventas por superar la meta del mes!"
-    },
-    {
-        id: 3,
-        text: "Nuevo horario de comedor: Lunes a Viernes de 12:00 a 15:00 hrs."
-    },
-    {
-        id: 4,
-        text: "Mantenimiento programado en el sistema de correo este sábado de 22:00 a 02:00 hrs."
-    },
-    {
-        id: 5,
-        text: "Inscripciones abiertas para el torneo de fútbol interdepartamental 2025."
+        return result.data;
+    } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        return null;
     }
-];
+}
 
 // ============================================
 // ICONS SVG LIBRARY
@@ -411,14 +105,14 @@ const iconsLibrary = {
 // AVATAR COLORS (matching the template palette)
 // ============================================
 const avatarColors = [
-    '#1a3a8f',  // Primary blue
-    '#2563eb',  // Bright blue
-    '#c9a227',  // Gold
-    '#dc2626',  // Red
-    '#f59e0b',  // Orange
-    '#0d9488',  // Teal
-    '#7c3aed',  // Purple
-    '#059669',  // Green
-    '#0891b2',  // Cyan
-    '#be185d'   // Pink
+    '#1a3a8f',
+    '#2563eb',
+    '#c9a227',
+    '#dc2626',
+    '#f59e0b',
+    '#0d9488',
+    '#7c3aed',
+    '#059669',
+    '#0891b2',
+    '#be185d'
 ];

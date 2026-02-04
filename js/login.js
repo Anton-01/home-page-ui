@@ -1,33 +1,41 @@
 // ============================================
 // LOGIN VALIDATION AND FUNCTIONALITY
+// Integration with real backend at https://marks-test.com/graphql
 // ============================================
 
-// Demo credentials (in real app, this would be server-side)
-const DEMO_CREDENTIALS = {
-    email: 'usuario@empresa.com',
-    password: 'password123'
-};
+// GraphQL endpoint
+const GRAPHQL_URL = '/api/graphql';
+
+// Companies data (will be loaded from backend)
+let companiesData = [];
 
 // ============================================
-// COMPANIES DATA (JSON)
+// FETCH COMPANIES FROM BACKEND
 // ============================================
-const companiesData = [
-    { id: 1, nombre: "Aceros Industriales S.A. de C.V." },
-    { id: 2, nombre: "Tecnología Avanzada MX" },
-    { id: 3, nombre: "Grupo Financiero Nacional" },
-    { id: 4, nombre: "Constructora del Norte" },
-    { id: 5, nombre: "Alimentos y Bebidas Premium" },
-    { id: 6, nombre: "Logística Express Internacional" },
-    { id: 7, nombre: "Farmacéutica Salud Total" },
-    { id: 8, nombre: "Energía Renovable Solar" },
-    { id: 9, nombre: "Telecomunicaciones Digitales" },
-    { id: 10, nombre: "Automotriz del Pacífico" },
-    { id: 11, nombre: "Textiles y Confecciones Modernas" },
-    { id: 12, nombre: "Minera Recursos Naturales" },
-    { id: 13, nombre: "Agropecuaria del Centro" },
-    { id: 14, nombre: "Servicios Profesionales Integrados" },
-    { id: 15, nombre: "Comercializadora Global Trade" }
-];
+async function fetchCompanies() {
+    try {
+        const response = await fetch(GRAPHQL_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                query: `
+                    query GetCompanies {
+                        companies {
+                            id
+                            nombre
+                        }
+                    }
+                `
+            })
+        });
+        const result = await response.json();
+        companiesData = result.data?.companies || [];
+        return companiesData;
+    } catch (error) {
+        console.error('Error fetching companies:', error);
+        return [];
+    }
+}
 
 // ============================================
 // SELECT2 STYLE DROPDOWN CLASS
@@ -65,6 +73,12 @@ class Select2Custom {
 
         // Bind events
         this.bindEvents();
+    }
+
+    updateData(newData) {
+        this.data = newData;
+        this.filteredData = [...newData];
+        this.renderOptions(this.data);
     }
 
     bindEvents() {
@@ -279,21 +293,13 @@ class AlertSystem {
         this.alerts = [];
     }
 
-    /**
-     * Show an alert message
-     * @param {string} type - Alert type: 'error', 'success', 'warning'
-     * @param {string} title - Alert title
-     * @param {string} message - Alert message
-     * @param {number} duration - Duration in ms (default 3000)
-     */
     show(type, title, message, duration = 3000) {
         const alertId = Date.now();
         const alertElement = this.createAlertElement(alertId, type, title, message);
-        
+
         this.container.appendChild(alertElement);
         this.alerts.push({ id: alertId, element: alertElement });
 
-        // Auto remove after duration
         setTimeout(() => {
             this.hide(alertId);
         }, duration);
@@ -342,7 +348,6 @@ class AlertSystem {
         }, 300);
     }
 
-    // Shorthand methods
     error(title, message) {
         return this.show('error', title, message);
     }
@@ -351,8 +356,8 @@ class AlertSystem {
         return this.show('success', title, message);
     }
 
-    warning(title, message) {
-        return this.show('warning', title, message);
+    warning(title, message, duration = 5000) {
+        return this.show('warning', title, message, duration);
     }
 }
 
@@ -362,30 +367,15 @@ let alertSystem;
 // ============================================
 // VALIDATION FUNCTIONS
 // ============================================
-
-/**
- * Validate email format
- * @param {string} email - Email to validate
- * @returns {boolean} - Whether email is valid
- */
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }
 
-/**
- * Validate password (minimum 6 characters)
- * @param {string} password - Password to validate
- * @returns {boolean} - Whether password is valid
- */
 function isValidPassword(password) {
     return password.length >= 6;
 }
 
-/**
- * Mark input as error
- * @param {HTMLElement} input - Input element
- */
 function setInputError(input) {
     input.classList.add('error');
     setTimeout(() => {
@@ -393,22 +383,13 @@ function setInputError(input) {
     }, 1000);
 }
 
-/**
- * Clear input error state
- * @param {HTMLElement} input - Input element
- */
 function clearInputError(input) {
     input.classList.remove('error');
 }
 
 // ============================================
-// FORM HANDLING
+// FORM HANDLING - REAL BACKEND LOGIN
 // ============================================
-
-/**
- * Handle login form submission
- * @param {Event} e - Form submit event
- */
 async function handleLogin(e) {
     e.preventDefault();
 
@@ -457,44 +438,56 @@ async function handleLogin(e) {
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
 
-    // Simulate API call
     try {
-        await simulateLogin(email, password);
-        
-        alertSystem.success('¡Bienvenido!', 'Inicio de sesión exitoso. Redirigiendo...');
-        
-        // Redirect after success
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 1500);
+        // Call GraphQL mutation for login
+        const response = await fetch(GRAPHQL_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                query: `
+                    mutation Login($email: String!, $password: String!) {
+                        login(email: $email, password: $password) {
+                            success
+                            message
+                            user { id email nombre companyId }
+                            token
+                        }
+                    }
+                `,
+                variables: { email, password }
+            })
+        });
 
+        const result = await response.json();
+        const loginResult = result.data?.login;
+
+        if (loginResult?.success) {
+            // Save session to cookie
+            const session = {
+                user: loginResult.user,
+                token: loginResult.token,
+                expiresAt: Date.now() + (60 * 60 * 1000) // 1 hour
+            };
+            document.cookie = `session=${encodeURIComponent(JSON.stringify(session))}; path=/; max-age=3600`;
+
+            alertSystem.success('¡Bienvenido!', 'Inicio de sesión exitoso. Redirigiendo...');
+
+            // Redirect to main page
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1500);
+        } else {
+            alertSystem.error('Error de autenticación', loginResult?.message || 'Credenciales incorrectas');
+            setInputError(emailInput);
+            setInputError(passwordInput);
+        }
     } catch (error) {
-        alertSystem.error('Error de autenticación', error.message);
-        setInputError(emailInput);
-        setInputError(passwordInput);
+        console.error('Login error:', error);
+        alertSystem.error('Error', 'No se pudo conectar con el servidor');
     } finally {
         submitBtn.classList.remove('loading');
         submitBtn.disabled = false;
     }
-}
-
-/**
- * Simulate login API call
- * @param {string} email - User email
- * @param {string} password - User password
- * @returns {Promise} - Resolves on success, rejects on failure
- */
-function simulateLogin(email, password) {
-    return new Promise((resolve, reject) => {
-        // Simulate network delay
-        setTimeout(() => {
-            if (email === DEMO_CREDENTIALS.email && password === DEMO_CREDENTIALS.password) {
-                resolve({ success: true });
-            } else {
-                reject(new Error('Credenciales incorrectas. Verifica tu correo y contraseña.'));
-            }
-        }, 1500);
-    });
 }
 
 // ============================================
@@ -503,7 +496,7 @@ function simulateLogin(email, password) {
 function togglePasswordVisibility() {
     const passwordInput = document.getElementById('password');
     const toggleBtn = document.getElementById('passwordToggle');
-    
+
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
         toggleBtn.innerHTML = `
@@ -543,11 +536,6 @@ function initInputListeners() {
 // ============================================
 // PASSWORD RESET MODAL FUNCTIONS
 // ============================================
-
-/**
- * Open the password reset modal
- * @param {Event} e - Click event
- */
 function openPasswordResetModal(e) {
     if (e) e.preventDefault();
 
@@ -557,7 +545,6 @@ function openPasswordResetModal(e) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 
-    // Reset form state
     const resetEmailInput = document.getElementById('resetEmail');
     const resetEmailError = document.getElementById('resetEmailError');
     const resetBtn = document.getElementById('passwordResetBtn');
@@ -569,15 +556,11 @@ function openPasswordResetModal(e) {
     if (resetEmailError) resetEmailError.textContent = '';
     if (resetBtn) resetBtn.disabled = true;
 
-    // Focus on email input
     setTimeout(() => {
         if (resetEmailInput) resetEmailInput.focus();
     }, 300);
 }
 
-/**
- * Close the password reset modal
- */
 function closePasswordResetModal() {
     const modal = document.getElementById('passwordResetModal');
     if (!modal) return;
@@ -586,9 +569,6 @@ function closePasswordResetModal() {
     document.body.style.overflow = '';
 }
 
-/**
- * Validate reset email and update button state
- */
 function validateResetEmail() {
     const resetEmailInput = document.getElementById('resetEmail');
     const resetEmailError = document.getElementById('resetEmailError');
@@ -598,7 +578,6 @@ function validateResetEmail() {
 
     const email = resetEmailInput.value.trim();
 
-    // Check if empty
     if (!email) {
         resetEmailError.textContent = '';
         resetBtn.disabled = true;
@@ -606,24 +585,18 @@ function validateResetEmail() {
         return false;
     }
 
-    // Check if valid email
     if (!isValidEmail(email)) {
         resetEmailError.textContent = 'Por favor ingresa un correo electrónico válido';
         resetBtn.disabled = true;
         return false;
     }
 
-    // Email is valid
     resetEmailError.textContent = '';
     resetBtn.disabled = false;
     clearInputError(resetEmailInput);
     return true;
 }
 
-/**
- * Handle password reset form submission
- * @param {Event} e - Form submit event
- */
 async function handlePasswordReset(e) {
     e.preventDefault();
 
@@ -633,7 +606,6 @@ async function handlePasswordReset(e) {
 
     const email = resetEmailInput.value.trim();
 
-    // Validate email
     if (!email) {
         setInputError(resetEmailInput);
         resetEmailError.textContent = 'El correo electrónico es requerido';
@@ -650,24 +622,26 @@ async function handlePasswordReset(e) {
         return;
     }
 
-    // Show loading state
     resetBtn.classList.add('loading');
     resetBtn.disabled = true;
 
-    // Simulate API call
     try {
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        // Call GraphQL mutation for password reset
+        await fetch(GRAPHQL_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                query: 'mutation RequestPasswordReset($email: String!) { requestPasswordReset(email: $email) }',
+                variables: { email }
+            })
+        });
 
-        // Close modal
         closePasswordResetModal();
-
-        // Show success message
         alertSystem.success(
             'Solicitud enviada',
             'Un administrador se pondrá en contacto contigo para restablecer tu contraseña.',
             5000
         );
-
     } catch (error) {
         alertSystem.error('Error', 'Ocurrió un error al procesar tu solicitud. Intenta nuevamente.');
     } finally {
@@ -676,9 +650,6 @@ async function handlePasswordReset(e) {
     }
 }
 
-/**
- * Initialize password reset modal event listeners
- */
 function initPasswordResetModal() {
     const modal = document.getElementById('passwordResetModal');
     const resetForm = document.getElementById('passwordResetForm');
@@ -686,12 +657,10 @@ function initPasswordResetModal() {
 
     if (!modal) return;
 
-    // Form submit handler
     if (resetForm) {
         resetForm.addEventListener('submit', handlePasswordReset);
     }
 
-    // Real-time email validation
     if (resetEmailInput) {
         resetEmailInput.addEventListener('input', validateResetEmail);
         resetEmailInput.addEventListener('blur', function() {
@@ -702,14 +671,12 @@ function initPasswordResetModal() {
         });
     }
 
-    // Close modal on overlay click
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             closePasswordResetModal();
         }
     });
 
-    // Close modal on Escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal.classList.contains('active')) {
             closePasswordResetModal();
@@ -720,12 +687,15 @@ function initPasswordResetModal() {
 // ============================================
 // INITIALIZATION
 // ============================================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // Initialize alert system
     alertSystem = new AlertSystem();
 
+    // Fetch companies from backend
+    const companies = await fetchCompanies();
+
     // Initialize company select (Select2 style)
-    companySelect = new Select2Custom('companySelect', companiesData, 'Selecciona una compañía');
+    companySelect = new Select2Custom('companySelect', companies, 'Selecciona una compañía');
 
     // Initialize form
     const loginForm = document.getElementById('loginForm');
@@ -744,11 +714,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize password reset modal
     initPasswordResetModal();
-
-    // Show demo credentials hint after 2 seconds
-    setTimeout(() => {
-        alertSystem.show('warning', 'Credenciales de prueba',
-            `Email: ${DEMO_CREDENTIALS.email} | Password: ${DEMO_CREDENTIALS.password}`,
-            5000);
-    }, 2000);
 });

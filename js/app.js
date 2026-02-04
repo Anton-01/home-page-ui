@@ -555,14 +555,8 @@ function initBannerSlider() {
 // ============================================
 // INITIALIZATION
 // ============================================
-document.addEventListener('DOMContentLoaded', () => {
-    // Render all components
-    renderModules();
-    renderContacts();
-    renderCalendar();
-    renderNewsTicker();
-
-    // Initialize event listeners
+document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize event listeners first
     initModalCloseOnOutsideClick();
     initModalCloseOnEscape();
     initEventModalCloseOnOutsideClick();
@@ -578,4 +572,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (searchInput) {
         searchInput.addEventListener('input', filterContacts);
     }
+
+    // Fetch data from backend and render components
+    try {
+        await fetchDashboardData();
+    } catch (error) {
+        console.error('Error loading dashboard data:', error);
+    }
+
+    // Render all components with fetched data
+    renderModules();
+    renderContacts();
+    renderCalendar();
+    renderNewsTicker();
 });
