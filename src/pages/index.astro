@@ -6,18 +6,14 @@ import ModulesGrid from '../components/ModulesGrid.astro';
 import Calendar from '../components/Calendar.astro';
 import ContactsModal from '../components/ContactsModal.astro';
 
-// Import static data with caching through GraphQL resolvers
-import { cache, CACHE_KEYS, CACHE_TTL } from '../lib/cache';
-import modulesData from '../data/modules.json';
-import contactsData from '../data/contacts.json';
-import eventsData from '../data/events.json';
-import newsData from '../data/news.json';
-import { getInitials, getAvatarColor } from '../data/icons';
+// Backend GraphQL URL
+const BACKEND_GRAPHQL_URL = import.meta.env.BACKEND_GRAPHQL_URL || 'https://marks-test.com/graphql';
 
 // Check authentication
 const sessionCookie = Astro.cookies.get('session')?.value;
 let isAuthenticated = false;
 let user = null;
+let authToken = '';
 
 if (sessionCookie) {
   try {
@@ -25,6 +21,7 @@ if (sessionCookie) {
     if (session.expiresAt > Date.now()) {
       isAuthenticated = true;
       user = session.user;
+      authToken = session.token || '';
     }
   } catch {
     // Invalid cookie
@@ -36,34 +33,67 @@ if (!isAuthenticated) {
   return Astro.redirect('/login');
 }
 
-// Load data (using cache)
-const modules = await cache.getOrSet(
-  CACHE_KEYS.MODULES,
-  () => modulesData,
-  CACHE_TTL.LONG
-);
+// Fetch data from real backend
+async function fetchGraphQL(query: string, variables?: Record<string, unknown>) {
+  try {
+    const response = await fetch(BACKEND_GRAPHQL_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(authToken && { 'Authorization': `Bearer ${authToken}` }),
+      },
+      body: JSON.stringify({ query, variables }),
+    });
+    const result = await response.json();
+    return result.data;
+  } catch (error) {
+    console.error('GraphQL fetch error:', error);
+    return null;
+  }
+}
 
-const contacts = await cache.getOrSet(
-  CACHE_KEYS.CONTACTS,
-  () => contactsData.map(contact => ({
-    ...contact,
-    initials: getInitials(contact.nombre),
-    avatarColor: getAvatarColor(contact.nombre)
-  })),
-  CACHE_TTL.LONG
-);
+// Load all dashboard data from backend
+const dashboardData = await fetchGraphQL(`
+  query GetDashboardData {
+    modules {
+      id
+      label
+      type
+      url
+      target
+      modalId
+      icon
+      highlight
+    }
+    contacts {
+      id
+      nombre
+      departamento
+      email
+      telefono
+      extension
+      imagen
+      initials
+      avatarColor
+    }
+    calendarEvents {
+      day
+      title
+      content
+      time
+    }
+    newsItems {
+      id
+      text
+    }
+  }
+`);
 
-const events = await cache.getOrSet(
-  CACHE_KEYS.EVENTS,
-  () => eventsData,
-  CACHE_TTL.LONG
-);
-
-const newsItems = await cache.getOrSet(
-  CACHE_KEYS.NEWS,
-  () => newsData,
-  CACHE_TTL.MEDIUM
-);
+// Extract data with fallbacks
+const modules = dashboardData?.modules || [];
+const contacts = dashboardData?.contacts || [];
+const events = dashboardData?.calendarEvents || [];
+const newsItems = dashboardData?.newsItems || [];
 ---
 
 <DashboardLayout title="Panel de Comunicación Efectiva">
