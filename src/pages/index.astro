@@ -12,7 +12,7 @@ const BACKEND_GRAPHQL_URL = import.meta.env.BACKEND_GRAPHQL_URL || 'https://mark
 // Check authentication
 const sessionCookie = Astro.cookies.get('session')?.value;
 let isAuthenticated = false;
-let user = null;
+let user: any = null;
 let authToken = '';
 
 if (sessionCookie) {
@@ -21,7 +21,7 @@ if (sessionCookie) {
     if (session.expiresAt > Date.now()) {
       isAuthenticated = true;
       user = session.user;
-      authToken = session.token || '';
+      authToken = session.access_token || '';
     }
   } catch {
     // Invalid cookie
@@ -52,48 +52,62 @@ async function fetchGraphQL(query: string, variables?: Record<string, unknown>) 
   }
 }
 
-// Load all dashboard data from backend
+// Get companyId from authenticated user
+const companyId = user?.company_id || user?.company?.id || '';
+
+// Load all dashboard data from backend (queries require companyId)
 const dashboardData = await fetchGraphQL(`
-  query GetDashboardData {
-    modules {
+  query GetDashboardData($companyId: ID!) {
+    modules(companyId: $companyId) {
       id
-      label
-      type
+      name
+      group_name
+      icon
+      icon_type
       url
       target
-      modalId
-      icon
-      highlight
+      sort_order
+      is_featured
+      background_color
     }
-    contacts {
+    contacts(companyId: $companyId) {
       id
-      nombre
-      departamento
+      name
+      department
       email
-      telefono
+      phone
       extension
-      imagen
-      initials
-      avatarColor
+      avatar_url
     }
-    calendarEvents {
-      day
-      title
-      content
-      time
-    }
-    newsItems {
+    calendarEvents(companyId: $companyId) {
       id
-      text
+      title
+      description
+      event_date
+      start_time
+      end_time
+      is_all_day
+    }
+    newsItems(companyId: $companyId) {
+      id
+      content
+      is_active
+    }
+    bannerImages(companyId: $companyId) {
+      id
+      image_url
+      alt_text
+      sort_order
     }
   }
-`);
+`, { companyId });
 
 // Extract data with fallbacks
 const modules = dashboardData?.modules || [];
 const contacts = dashboardData?.contacts || [];
 const events = dashboardData?.calendarEvents || [];
 const newsItems = dashboardData?.newsItems || [];
+const bannerImages = dashboardData?.bannerImages || [];
 ---
 
 <DashboardLayout title="Panel de Comunicación Efectiva">
