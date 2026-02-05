@@ -18,7 +18,7 @@ if (sessionCookie) {
 }
 
 // Fetch companies from real backend
-let companies: { id: number; nombre: string }[] = [];
+let companies: { id: number; name: string }[] = [];
 try {
   const response = await fetch(BACKEND_GRAPHQL_URL, {
     method: 'POST',
@@ -30,7 +30,7 @@ try {
         query GetCompanies {
           companies {
             id
-            nombre
+            name
           }
         }
       `
@@ -77,7 +77,7 @@ try {
               </div>
               <div class="select2-results" id="companyResults">
                 {companies.map(company => (
-                  <div class="select2-result" data-id={company.id}>{company.nombre}</div>
+                  <div class="select2-result" data-id={company.id}>{company.name}</div>
                 ))}
               </div>
             </div>
@@ -895,10 +895,10 @@ class Select2Custom {
   private selectedValue: number | null = null;
   private isOpen = false;
   private highlightedIndex = -1;
-  private filteredData: { id: number; nombre: string }[] = [];
-  private data: { id: number; nombre: string }[];
+  private filteredData: { id: number; name: string }[] = [];
+  private data: { id: number; name: string }[];
 
-  constructor(containerId: string, data: { id: number; nombre: string }[]) {
+  constructor(containerId: string, data: { id: number; name: string }[]) {
     this.container = document.getElementById(containerId);
     this.data = data;
     this.filteredData = [...data];
@@ -958,7 +958,7 @@ class Select2Custom {
   private filterOptions(term: string): void {
     const search = term.toLowerCase().trim();
     this.filteredData = search
-      ? this.data.filter(item => item.nombre.toLowerCase().includes(search))
+      ? this.data.filter(item => item.name.toLowerCase().includes(search))
       : [...this.data];
     this.renderOptions();
     this.highlightedIndex = -1;
@@ -974,7 +974,7 @@ class Select2Custom {
 
     this.resultsContainer.innerHTML = this.filteredData.map((item, index) => `
       <div class="select2-result ${this.selectedValue === item.id ? 'selected' : ''}"
-           data-id="${item.id}" data-index="${index}">${item.nombre}</div>
+           data-id="${item.id}" data-index="${index}">${item.name}</div>
     `).join('');
 
     this.resultsContainer.querySelectorAll('.select2-result').forEach(result => {
@@ -990,10 +990,10 @@ class Select2Custom {
     });
   }
 
-  private select(item: { id: number; nombre: string }): void {
+  private select(item: { id: number; name: string }): void {
     this.selectedValue = item.id;
     if (this.selectionText) {
-      this.selectionText.textContent = item.nombre;
+      this.selectionText.textContent = item.name;
       this.selectionText.classList.remove('placeholder');
     }
     if (this.hiddenInput) this.hiddenInput.value = item.id.toString();
@@ -1030,10 +1030,10 @@ class Select2Custom {
 function initLogin(): void {
   alertSystem = new AlertSystem();
 
-  // Initialize company select
+  // Initialize company select from server-rendered options
   const companies = Array.from(document.querySelectorAll('#companyResults .select2-result')).map(el => ({
     id: parseInt(el.getAttribute('data-id') || '0'),
-    nombre: el.textContent || ''
+    name: el.textContent?.trim() || ''
   }));
   new Select2Custom('companySelect', companies);
 
