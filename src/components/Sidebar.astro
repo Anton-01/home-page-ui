@@ -32,6 +32,38 @@
 <!-- Main Alert Container -->
 <div id="mainAlertContainer" class="main-alert-container"></div>
 
+<!-- Incident Modal -->
+<div class="incident-modal-overlay" id="incidentModalOverlay">
+  <div class="incident-modal">
+    <div class="incident-modal-header">
+      <h2 class="incident-modal-title">Levantar Incidente</h2>
+      <button class="incident-modal-close" id="closeIncidentModal">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </div>
+    <form class="incident-modal-form" id="incidentForm">
+      <div class="incident-form-group">
+        <label for="incidentTitle" class="incident-form-label">Título del incidente</label>
+        <input type="text" id="incidentTitle" name="title" class="incident-form-input" placeholder="Ej: Problema con acceso al sistema" required>
+      </div>
+      <div class="incident-form-group">
+        <label for="incidentDescription" class="incident-form-label">Descripción</label>
+        <textarea id="incidentDescription" name="description" class="incident-form-textarea" placeholder="Describe el incidente con el mayor detalle posible..." rows="5" required></textarea>
+      </div>
+      <div class="incident-form-actions">
+        <button type="button" class="incident-btn incident-btn-cancel" id="cancelIncidentBtn">Cancelar</button>
+        <button type="submit" class="incident-btn incident-btn-submit" id="submitIncidentBtn">
+          <span class="btn-text">Enviar Incidente</span>
+          <span class="btn-loading" style="display: none;">
+            <svg class="spinner" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4 31.4" stroke-linecap="round"/></svg>
+            Enviando...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <style>
 .sidebar {
   width: var(--sidebar-width);
@@ -204,6 +236,185 @@
   max-width: 400px;
 }
 
+/* Incident Modal */
+.incident-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 3000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.incident-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.incident-modal {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--border-radius-lg);
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.incident-modal-overlay.active .incident-modal {
+  transform: scale(1) translateY(0);
+}
+
+.incident-modal-header {
+  background: linear-gradient(135deg, var(--color-accent-red) 0%, #b91c1c 100%);
+  padding: 20px 25px;
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.incident-modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+.incident-modal-close {
+  width: 32px;
+  height: 32px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: var(--transition-fast);
+}
+
+.incident-modal-close:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.incident-modal-close svg {
+  width: 18px;
+  height: 18px;
+  fill: white;
+}
+
+.incident-modal-form {
+  padding: 25px;
+}
+
+.incident-form-group {
+  margin-bottom: 20px;
+}
+
+.incident-form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-light);
+  margin-bottom: 8px;
+}
+
+.incident-form-input,
+.incident-form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-text-white);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-md);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.incident-form-input:focus,
+.incident-form-textarea:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.incident-form-input::placeholder,
+.incident-form-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.incident-form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.incident-form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 25px;
+}
+
+.incident-btn {
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.incident-btn-cancel {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-light);
+}
+
+.incident-btn-cancel:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.incident-btn-submit {
+  background-color: var(--color-gold);
+  color: var(--color-bg-primary);
+}
+
+.incident-btn-submit:hover {
+  background-color: #d4a93c;
+}
+
+.incident-btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.incident-btn-submit .spinner {
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .sidebar {
@@ -254,15 +465,19 @@
 }
 </style>
 
-<script>
-// FAB Toggle
+<script is:inline>
+// FAB Toggle and Incident Modal
 function initSidebarFab() {
-  const fab = document.getElementById('sidebarFab');
-  const fabContainer = document.querySelector('.sidebar-fab-container');
-  const ticketBtn = document.getElementById('ticketBtn');
+  var fab = document.getElementById('sidebarFab');
+  var fabContainer = document.querySelector('.sidebar-fab-container');
+  var ticketBtn = document.getElementById('ticketBtn');
+  var incidentOverlay = document.getElementById('incidentModalOverlay');
+  var closeIncidentBtn = document.getElementById('closeIncidentModal');
+  var cancelIncidentBtn = document.getElementById('cancelIncidentBtn');
+  var incidentForm = document.getElementById('incidentForm');
 
   if (fab && fabContainer) {
-    fab.addEventListener('click', (e) => {
+    fab.addEventListener('click', function(e) {
       e.stopPropagation();
       fabContainer.classList.toggle('active');
       fab.classList.toggle('active');
@@ -270,38 +485,174 @@ function initSidebarFab() {
   }
 
   if (ticketBtn) {
-    ticketBtn.addEventListener('click', (e) => {
+    ticketBtn.addEventListener('click', function(e) {
       e.stopPropagation();
       closeSidebarFab();
-      showTicketAlert();
+      openIncidentModal();
     });
   }
 
+  if (closeIncidentBtn) {
+    closeIncidentBtn.addEventListener('click', closeIncidentModal);
+  }
+
+  if (cancelIncidentBtn) {
+    cancelIncidentBtn.addEventListener('click', closeIncidentModal);
+  }
+
+  if (incidentOverlay) {
+    incidentOverlay.addEventListener('click', function(e) {
+      if (e.target === incidentOverlay) {
+        closeIncidentModal();
+      }
+    });
+  }
+
+  if (incidentForm) {
+    incidentForm.addEventListener('submit', handleIncidentSubmit);
+  }
+
   // Close FAB when clicking outside
-  document.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement;
+  document.addEventListener('click', function(e) {
+    var target = e.target;
     if (fabContainer && !fabContainer.contains(target)) {
       closeSidebarFab();
     }
   });
 
-  // Close FAB on Escape
-  document.addEventListener('keydown', (e) => {
+  // Close FAB and Modal on Escape
+  document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
       closeSidebarFab();
+      closeIncidentModal();
     }
   });
 }
 
 function closeSidebarFab() {
-  const fabContainer = document.querySelector('.sidebar-fab-container');
-  const fab = document.getElementById('sidebarFab');
+  var fabContainer = document.querySelector('.sidebar-fab-container');
+  var fab = document.getElementById('sidebarFab');
   if (fabContainer) fabContainer.classList.remove('active');
   if (fab) fab.classList.remove('active');
 }
 
-function showTicketAlert() {
-  let alertContainer = document.getElementById('mainAlertContainer');
+function openIncidentModal() {
+  var overlay = document.getElementById('incidentModalOverlay');
+  if (overlay) {
+    overlay.classList.add('active');
+    var titleInput = document.getElementById('incidentTitle');
+    if (titleInput) titleInput.focus();
+  }
+}
+
+function closeIncidentModal() {
+  var overlay = document.getElementById('incidentModalOverlay');
+  var form = document.getElementById('incidentForm');
+  if (overlay) overlay.classList.remove('active');
+  if (form) form.reset();
+}
+
+function handleIncidentSubmit(e) {
+  e.preventDefault();
+
+  var titleInput = document.getElementById('incidentTitle');
+  var descInput = document.getElementById('incidentDescription');
+  var submitBtn = document.getElementById('submitIncidentBtn');
+
+  var title = titleInput ? titleInput.value.trim() : '';
+  var description = descInput ? descInput.value.trim() : '';
+
+  if (!title || !description) {
+    showIncidentAlert('error', 'Campos requeridos', 'Por favor completa todos los campos.');
+    return;
+  }
+
+  // Show loading state
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    var btnText = submitBtn.querySelector('.btn-text');
+    var btnLoading = submitBtn.querySelector('.btn-loading');
+    if (btnText) btnText.style.display = 'none';
+    if (btnLoading) btnLoading.style.display = 'flex';
+  }
+
+  // Get session data for the request
+  var session = getSessionData();
+  var accessToken = session ? session.access_token : null;
+  var companyId = session && session.user ? (session.user.company_id || (session.user.company && session.user.company.id)) : null;
+
+  // Send to backend via GraphQL
+  // NOTE: The backend needs to implement the createIncident mutation
+  // Expected mutation: createIncident(title: String!, description: String!, companyId: ID!): Incident
+  fetch('/api/graphql', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': accessToken ? 'Bearer ' + accessToken : ''
+    },
+    body: JSON.stringify({
+      query: 'mutation CreateIncident($title: String!, $description: String!, $companyId: ID!) { createIncident(title: $title, description: $description, companyId: $companyId) { id title description status created_at } }',
+      variables: {
+        title: title,
+        description: description,
+        companyId: companyId || '1'
+      }
+    })
+  })
+  .then(function(response) { return response.json(); })
+  .then(function(data) {
+    // Reset button state
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      var btnText = submitBtn.querySelector('.btn-text');
+      var btnLoading = submitBtn.querySelector('.btn-loading');
+      if (btnText) btnText.style.display = 'inline';
+      if (btnLoading) btnLoading.style.display = 'none';
+    }
+
+    if (data.errors) {
+      // If the mutation doesn't exist yet, show info message
+      console.warn('Backend mutation not available:', data.errors);
+      closeIncidentModal();
+      showIncidentAlert('info', 'Funcionalidad pendiente', 'El registro de incidentes se habilitará próximamente. Tu solicitud: "' + title + '"');
+    } else {
+      closeIncidentModal();
+      showIncidentAlert('success', 'Incidente Registrado', 'Tu incidente ha sido enviado. Un administrador se pondrá en contacto contigo pronto.');
+    }
+  })
+  .catch(function(error) {
+    console.error('Error submitting incident:', error);
+    // Reset button state
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      var btnText = submitBtn.querySelector('.btn-text');
+      var btnLoading = submitBtn.querySelector('.btn-loading');
+      if (btnText) btnText.style.display = 'inline';
+      if (btnLoading) btnLoading.style.display = 'none';
+    }
+    closeIncidentModal();
+    showIncidentAlert('info', 'Funcionalidad pendiente', 'El registro de incidentes se habilitará próximamente.');
+  });
+}
+
+function getSessionData() {
+  var cookies = document.cookie.split(';');
+  for (var i = 0; i < cookies.length; i++) {
+    var cookie = cookies[i].trim();
+    if (cookie.indexOf('session=') === 0) {
+      try {
+        var value = cookie.substring(8);
+        return JSON.parse(decodeURIComponent(value));
+      } catch (e) {
+        return null;
+      }
+    }
+  }
+  return null;
+}
+
+function showIncidentAlert(type, title, message) {
+  var alertContainer = document.getElementById('mainAlertContainer');
   if (!alertContainer) {
     alertContainer = document.createElement('div');
     alertContainer.id = 'mainAlertContainer';
@@ -309,29 +660,26 @@ function showTicketAlert() {
     document.body.appendChild(alertContainer);
   }
 
-  const alertId = Date.now();
-  const alert = document.createElement('div');
-  alert.className = 'main-alert main-alert-success';
-  alert.setAttribute('data-alert-id', alertId.toString());
-  alert.innerHTML = `
-    <div class="main-alert-icon">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-    </div>
-    <div class="main-alert-content">
-      <div class="main-alert-title">Incidente Registrado</div>
-      <div class="main-alert-message">Un administrador se pondrá en contacto contigo pronto.</div>
-    </div>
-    <button class="main-alert-close" onclick="this.parentElement.remove()">
-      <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-    </button>
-  `;
+  var alertClass = 'main-alert main-alert-' + type;
+  var iconPath = type === 'success'
+    ? 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'
+    : type === 'error'
+    ? 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'
+    : 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z';
+
+  var alert = document.createElement('div');
+  alert.className = alertClass;
+  alert.innerHTML = '<div class="main-alert-icon"><svg viewBox="0 0 24 24"><path d="' + iconPath + '"/></svg></div>' +
+    '<div class="main-alert-content"><div class="main-alert-title">' + title + '</div>' +
+    '<div class="main-alert-message">' + message + '</div></div>' +
+    '<button class="main-alert-close" onclick="this.parentElement.remove()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>';
 
   alertContainer.appendChild(alert);
 
-  setTimeout(() => {
+  setTimeout(function() {
     alert.classList.add('hiding');
-    setTimeout(() => alert.remove(), 300);
-  }, 5000);
+    setTimeout(function() { alert.remove(); }, 300);
+  }, 6000);
 }
 
 document.addEventListener('DOMContentLoaded', initSidebarFab);

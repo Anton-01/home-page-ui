@@ -1124,9 +1124,10 @@ class Select2Custom {
             expiresAt: Date.now() + (60 * 60 * 1000)
           };
           document.cookie = 'session=' + encodeURIComponent(JSON.stringify(session)) + '; path=/; max-age=3600';
-
-          alertSystem.success('¡Bienvenido!', 'Inicio de sesión exitoso. Redirigiendo...');
-          setTimeout(function() { window.location.href = '/'; }, 1500);
+          // Set flag so dashboard shows welcome alert
+          document.cookie = 'login_success=1; path=/; max-age=10';
+          // Redirect immediately for fast feel
+          window.location.href = '/';
         } else {
           alertSystem.error('Error', 'Respuesta inesperada del servidor');
         }

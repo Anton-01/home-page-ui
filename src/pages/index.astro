@@ -55,9 +55,16 @@ async function fetchGraphQL(query: string, variables?: Record<string, unknown>) 
 // Get companyId from authenticated user
 const companyId = user?.company_id || user?.company?.id || '';
 
+// Current date for calendar
+const now = new Date();
+const currentMonth = now.getMonth() + 1;
+const currentYear = now.getFullYear();
+const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const currentMonthName = monthNames[now.getMonth()];
+
 // Load all dashboard data from backend (queries require companyId)
 const dashboardData = await fetchGraphQL(`
-  query GetDashboardData($companyId: ID!) {
+  query GetDashboardData($companyId: ID!, $month: Int, $year: Int) {
     modules(companyId: $companyId) {
       id
       name
@@ -79,7 +86,7 @@ const dashboardData = await fetchGraphQL(`
       extension
       avatar_url
     }
-    calendarEvents(companyId: $companyId) {
+    calendarEvents(companyId: $companyId, month: $month, year: $year) {
       id
       title
       description
@@ -99,32 +106,147 @@ const dashboardData = await fetchGraphQL(`
       alt_text
       sort_order
     }
+    companyConfiguration(companyId: $companyId) {
+      logo_url
+      logo_width
+      header_title
+      footer_text
+      primary_color
+      secondary_color
+      accent_color
+      module_bg_color
+      module_hover_color
+      show_calendar
+      show_news_ticker
+      show_contacts
+    }
   }
-`, { companyId });
+`, { companyId, month: currentMonth, year: currentYear });
 
-// Extract data with fallbacks
-const modules = dashboardData?.modules || [];
-const contacts = dashboardData?.contacts || [];
-const events = dashboardData?.calendarEvents || [];
-const newsItems = dashboardData?.newsItems || [];
-const bannerImages = dashboardData?.bannerImages || [];
+// ============================================
+// TRANSFORM DATA: backend → component props
+// ============================================
+
+// Helper: get initials from name
+function getInitials(name: string): string {
+  const parts = name.trim().split(' ');
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return parts[0][0].toUpperCase();
+}
+
+// Helper: get consistent avatar color from name
+const avatarColors = ['#1a3a8f','#2563eb','#c9a227','#dc2626','#f59e0b','#0d9488','#7c3aed','#059669','#0891b2','#be185d'];
+function getAvatarColor(name: string): string {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return avatarColors[Math.abs(hash) % avatarColors.length];
+}
+
+// Modules: backend name → component label, determine type from url
+const modules = (dashboardData?.modules || []).map((m: any) => ({
+  id: m.id,
+  label: m.name,
+  type: m.url ? 'link' : 'modal',
+  url: m.url || '#',
+  target: m.target || '_self',
+  modalId: !m.url ? 'contactsModal' : null,
+  icon: m.icon || 'document',
+  highlight: m.is_featured ? 'gold' : (m.background_color || null),
+}));
+
+// Contacts: transform field names
+const contacts = (dashboardData?.contacts || []).map((c: any) => ({
+  id: c.id,
+  nombre: c.name,
+  departamento: c.department || '',
+  email: c.email || '',
+  telefono: c.phone || '',
+  extension: c.extension || '',
+  imagen: c.avatar_url || null,
+  initials: getInitials(c.name),
+  avatarColor: getAvatarColor(c.name),
+}));
+
+// Calendar events: extract day from event_date, combine times
+const events = (dashboardData?.calendarEvents || []).map((e: any) => {
+  const eventDate = new Date(e.event_date);
+  const day = eventDate.getDate();
+  let time = '';
+  if (e.is_all_day) {
+    time = 'Todo el día';
+  } else if (e.start_time && e.end_time) {
+    time = `${e.start_time} - ${e.end_time}`;
+  } else if (e.start_time) {
+    time = e.start_time;
+  }
+  return { day, title: e.title, content: e.description || '', time };
+});
+
+// News: backend content → component text
+const newsItems = (dashboardData?.newsItems || [])
+  .filter((n: any) => n.is_active !== false)
+  .map((n: any) => ({ id: n.id, text: n.content }));
+
+// Banner images
+const bannerImages = (dashboardData?.bannerImages || []).map((b: any) => ({
+  id: b.id, url: b.image_url, alt: b.alt_text || '', order: b.sort_order,
+}));
+
+// Company configuration
+const companyConfig = dashboardData?.companyConfiguration || null;
+const companyName = companyConfig?.header_title || user?.company?.name || 'Empresa';
+const companyLogo = companyConfig?.logo_url || null;
+const showCalendar = companyConfig?.show_calendar !== false;
+const showNewsTicker = companyConfig?.show_news_ticker !== false;
+const showContacts = companyConfig?.show_contacts !== false;
+
+// Check if user just logged in (for welcome alert)
+const showWelcome = Astro.cookies.get('login_success')?.value === '1';
+if (showWelcome) {
+  Astro.cookies.delete('login_success', { path: '/' });
+}
 ---
 
 <DashboardLayout title="Panel de Comunicación Efectiva">
   <!-- Banner -->
-  <Banner />
+  <Banner images={bannerImages} />
 
   <!-- News Ticker -->
-  <NewsTicker items={newsItems} />
+  {showNewsTicker && <NewsTicker items={newsItems} />}
 
   <!-- Bottom Section: Modules + Calendar -->
   <div class="bottom-section">
     <ModulesGrid modules={modules} />
-    <Calendar events={events} />
+    {showCalendar && <Calendar events={events} month={currentMonthName} year={currentYear} />}
   </div>
 
   <!-- Modals -->
-  <ContactsModal contacts={contacts} />
+  {showContacts && <ContactsModal contacts={contacts} />}
+
+  <!-- Welcome alert (shown after login) -->
+  {showWelcome && (
+    <script is:inline>
+      (function() {
+        var alertContainer = document.getElementById('mainAlertContainer');
+        if (!alertContainer) {
+          alertContainer = document.createElement('div');
+          alertContainer.id = 'mainAlertContainer';
+          alertContainer.className = 'main-alert-container';
+          document.body.appendChild(alertContainer);
+        }
+        var id = Date.now();
+        var el = document.createElement('div');
+        el.className = 'main-alert main-alert-success';
+        el.setAttribute('data-alert-id', id);
+        el.innerHTML = '<div class="main-alert-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div><div class="main-alert-content"><div class="main-alert-title">¡Bienvenido!</div><div class="main-alert-message">Inicio de sesión exitoso</div></div>';
+        alertContainer.appendChild(el);
+        setTimeout(function() {
+          el.classList.add('hiding');
+          setTimeout(function() { el.remove(); }, 300);
+        }, 3000);
+      })();
+    </script>
+  )}
 </DashboardLayout>
 
 <style>

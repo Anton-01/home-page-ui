@@ -12,18 +12,30 @@ interface Props {
   year?: number;
 }
 
-const { events, month = 'ENERO', year = 2025 } = Astro.props;
+const { events, month, year } = Astro.props;
 
-// January 2025 starts on Wednesday (offset is 2 counting from Monday)
-const firstDayOffset = 2;
-const daysInMonth = 31;
-const today = new Date();
-const currentDay = today.getDate();
-const currentMonth = today.getMonth();
-const currentYear = today.getFullYear();
+// Dynamic calendar: use current date
+const now = new Date();
+const displayMonth = month || new Intl.DateTimeFormat('es', { month: 'long' }).format(now);
+const displayYear = year || now.getFullYear();
 
-// Use today's date if we're in January 2025, otherwise use 14 as demo
-const highlightDay = (currentMonth === 0 && currentYear === 2025) ? currentDay : 14;
+// Calculate month/year for date math
+const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const monthIndex = monthNames.findIndex(m => m.toLowerCase() === displayMonth.toLowerCase());
+const calcMonth = monthIndex >= 0 ? monthIndex : now.getMonth();
+const calcYear = displayYear;
+
+// First day of month (0=Sun, convert to Mon-based: Mon=0..Sun=6)
+const firstDayOfMonth = new Date(calcYear, calcMonth, 1).getDay();
+const firstDayOffset = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
+
+// Days in month
+const daysInMonth = new Date(calcYear, calcMonth + 1, 0).getDate();
+
+// Highlight today only if viewing current month
+const today = now.getDate();
+const isCurrentMonth = calcMonth === now.getMonth() && calcYear === now.getFullYear();
+const highlightDay = isCurrentMonth ? today : -1;
 
 // Create event lookup map
 const eventsMap = new Map<number, CalendarEvent>();
@@ -40,7 +52,7 @@ const monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
   <div class="calendar-container">
     <div class="calendar">
       <div class="calendar-header">
-        <h2 class="calendar-month">{month} {year}</h2>
+        <h2 class="calendar-month">{displayMonth} {displayYear}</h2>
       </div>
       <div class="calendar-weekdays">
         <span class="calendar-weekday">L</span>
@@ -325,24 +337,20 @@ const monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 }
 </style>
 
-<script>
-const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-               'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-
+<script is:inline>
 function initCalendar() {
-  const calendarDays = document.querySelectorAll('.calendar-day.has-event');
-  const eventModal = document.getElementById('eventModal');
-  const closeModalBtn = document.getElementById('closeEventModal');
+  var calendarDays = document.querySelectorAll('.calendar-day.has-event');
+  var eventModal = document.getElementById('eventModal');
+  var closeModalBtn = document.getElementById('closeEventModal');
 
-  calendarDays.forEach(day => {
-    day.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      const dayNum = target.dataset.day;
-      const eventData = target.dataset.event;
-
+  calendarDays.forEach(function(day) {
+    day.addEventListener('click', function(e) {
+      var target = e.target;
+      var dayNum = target.getAttribute('data-day');
+      var eventData = target.getAttribute('data-event');
       if (eventData && dayNum) {
-        const event = JSON.parse(eventData);
-        showEventModal(parseInt(dayNum), event, e as MouseEvent);
+        var event = JSON.parse(eventData);
+        showEventModal(parseInt(dayNum), event, e);
       }
     });
   });
@@ -350,9 +358,9 @@ function initCalendar() {
   closeModalBtn?.addEventListener('click', closeEventModal);
 
   // Close on outside click
-  document.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement;
-    if (eventModal?.classList.contains('active')) {
+  document.addEventListener('click', function(e) {
+    var target = e.target;
+    if (eventModal && eventModal.classList.contains('active')) {
       if (!eventModal.contains(target) && !target.classList.contains('has-event')) {
         closeEventModal();
       }
@@ -360,34 +368,36 @@ function initCalendar() {
   });
 
   // Close on Escape
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
       closeEventModal();
     }
   });
 }
 
-function showEventModal(day: number, event: { title: string; content: string; time: string }, e: MouseEvent) {
-  const modal = document.getElementById('eventModal');
+function showEventModal(day, event, e) {
+  var modal = document.getElementById('eventModal');
   if (!modal) return;
 
-  const dateEl = document.getElementById('eventModalDate');
-  const titleEl = document.getElementById('eventModalTitle');
-  const contentEl = document.getElementById('eventModalContent');
-  const timeTextEl = document.getElementById('eventModalTimeText');
+  var dateEl = document.getElementById('eventModalDate');
+  var titleEl = document.getElementById('eventModalTitle');
+  var contentEl = document.getElementById('eventModalContent');
+  var timeTextEl = document.getElementById('eventModalTimeText');
 
-  if (dateEl) dateEl.textContent = `${day} de ${months[0]} 2025`;
+  var calMonth = document.querySelector('.calendar-month');
+  var monthYearText = calMonth ? calMonth.textContent : '';
+  if (dateEl) dateEl.textContent = day + ' de ' + monthYearText;
   if (titleEl) titleEl.textContent = event.title;
   if (contentEl) contentEl.textContent = event.content;
   if (timeTextEl) timeTextEl.textContent = event.time;
 
   // Position the modal
-  const rect = (e.target as HTMLElement).getBoundingClientRect();
-  const modalWidth = 300;
-  const modalHeight = 200;
+  var rect = e.target.getBoundingClientRect();
+  var modalWidth = 300;
+  var modalHeight = 200;
 
-  let left = rect.left + window.scrollX;
-  let top = rect.bottom + window.scrollY + 10;
+  var left = rect.left + window.scrollX;
+  var top = rect.bottom + window.scrollY + 10;
 
   if (left + modalWidth > window.innerWidth - 20) {
     left = window.innerWidth - modalWidth - 20;
@@ -399,13 +409,13 @@ function showEventModal(day: number, event: { title: string; content: string; ti
 
   if (left < 20) left = 20;
 
-  modal.style.left = `${left}px`;
-  modal.style.top = `${top}px`;
+  modal.style.left = left + 'px';
+  modal.style.top = top + 'px';
   modal.classList.add('active');
 }
 
 function closeEventModal() {
-  const modal = document.getElementById('eventModal');
+  var modal = document.getElementById('eventModal');
   if (modal) {
     modal.classList.remove('active');
   }
