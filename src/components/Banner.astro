@@ -1,31 +1,49 @@
 ---
+interface BannerImage {
+  url: string;
+  alt?: string;
+}
+
+interface Props {
+  images?: BannerImage[];
+  title?: string;
+}
+
+const { images, title = 'Panel de comunicación efectiva' } = Astro.props;
+
+// Fallback to default images if none provided from backend
+const defaultImages: BannerImage[] = [
+  { url: '/images/slide1.svg', alt: 'Equipo de trabajo' },
+  { url: '/images/slide2.svg', alt: 'Documentos' },
+  { url: '/images/slide3.svg', alt: 'Indicadores' },
+  { url: '/images/slide4.svg', alt: 'Gestion' },
+];
+
+const bannerImages = (images && images.length > 0) ? images : defaultImages;
 ---
 
 <section class="banner">
   <div class="banner-content">
-    <h1 class="banner-title">Panel de comunicación efectiva</h1>
+    <h1 class="banner-title">{title}</h1>
     <div class="banner-image-mobile">
       <div class="banner-slider-mobile" id="bannerSliderMobile">
-        <img src="/images/slide1.svg" alt="Equipo de trabajo" class="slide-image active">
-        <img src="/images/slide2.svg" alt="Documentos" class="slide-image">
-        <img src="/images/slide3.svg" alt="Indicadores" class="slide-image">
-        <img src="/images/slide4.svg" alt="Gestion" class="slide-image">
+        {bannerImages.map((img, index) => (
+          <img src={img.url} alt={img.alt || `Slide ${index + 1}`} class:list={['slide-image', { active: index === 0 }]}>
+        ))}
       </div>
     </div>
   </div>
   <div class="banner-image">
     <div class="banner-slider" id="bannerSlider">
-      <img src="/images/slide1.svg" alt="Equipo de trabajo" class="slide-image active">
-      <img src="/images/slide2.svg" alt="Documentos" class="slide-image">
-      <img src="/images/slide3.svg" alt="Indicadores" class="slide-image">
-      <img src="/images/slide4.svg" alt="Gestion" class="slide-image">
+      {bannerImages.map((img, index) => (
+        <img src={img.url} alt={img.alt || `Slide ${index + 1}`} class:list={['slide-image', { active: index === 0 }]}>
+      ))}
     </div>
   </div>
   <div class="banner-dots" id="bannerDots">
-    <span class="banner-dot active" data-index="0"></span>
-    <span class="banner-dot" data-index="1"></span>
-    <span class="banner-dot" data-index="2"></span>
-    <span class="banner-dot" data-index="3"></span>
+    {bannerImages.map((_, index) => (
+      <span class:list={['banner-dot', { active: index === 0 }]} data-index={index}></span>
+    ))}
   </div>
 </section>
 

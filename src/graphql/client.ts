@@ -1,9 +1,12 @@
 /**
  * GraphQL Client for client-side queries
  * Uses fetch API to communicate with the GraphQL endpoint
+ *
+ * By default, uses the local proxy (/api/graphql) which forwards to the backend.
+ * This can be configured via PUBLIC_GRAPHQL_URL environment variable.
  */
 
-const GRAPHQL_URL = '/api/graphql';
+const GRAPHQL_URL = import.meta.env.PUBLIC_GRAPHQL_URL || '/api/graphql';
 
 interface GraphQLResponse<T> {
   data?: T;

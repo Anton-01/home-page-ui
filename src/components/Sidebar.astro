@@ -1,10 +1,11 @@
 ---
+
 ---
 
 <aside class="sidebar">
   <div class="sidebar-icon" title="Inicio">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
     </svg>
   </div>
 
@@ -12,9 +13,22 @@
   <div class="sidebar-fab-container">
     <!-- Expandable Options (hidden by default) -->
     <div class="sidebar-fab-options" id="sidebarFabOptions">
+      <button
+        class="sidebar-fab-option sidebar-fab-icon-only"
+        id="logoutFabBtn"
+      >
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"
+          ></path>
+        </svg>
+        <span class="fab-tooltip">Cerrar sesión</span>
+      </button>
       <button class="sidebar-fab-option sidebar-fab-icon-only" id="ticketBtn">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+          ></path>
         </svg>
         <span class="fab-tooltip">Levantar incidente</span>
       </button>
@@ -22,8 +36,14 @@
 
     <!-- Main FAB Button -->
     <div class="sidebar-icon sidebar-fab" id="sidebarFab" title="Opciones">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="fab-icon-main">
-        <path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+      <svg
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        class="fab-icon-main"
+      >
+        <path
+          d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"
+        ></path>
       </svg>
     </div>
   </div>
@@ -32,307 +52,844 @@
 <!-- Main Alert Container -->
 <div id="mainAlertContainer" class="main-alert-container"></div>
 
+<!-- Incident Modal -->
+<div class="incident-modal-overlay" id="incidentModalOverlay">
+  <div class="incident-modal">
+    <div class="incident-modal-header">
+      <h2 class="incident-modal-title">Levantar Incidente</h2>
+      <button class="incident-modal-close" id="closeIncidentModal">
+        <svg viewBox="0 0 24 24"
+          ><path
+            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+          ></path></svg
+        >
+      </button>
+    </div>
+    <form class="incident-modal-form" id="incidentForm">
+      <div class="incident-form-group">
+        <label for="incidentTitle" class="incident-form-label"
+          >Título del incidente</label
+        >
+        <input
+          type="text"
+          id="incidentTitle"
+          name="title"
+          class="incident-form-input"
+          placeholder="Ej: Problema con acceso al sistema"
+          required
+        />
+      </div>
+      <div class="incident-form-group">
+        <label for="incidentDescription" class="incident-form-label"
+          >Descripción</label
+        >
+        <textarea
+          id="incidentDescription"
+          name="description"
+          class="incident-form-textarea"
+          placeholder="Describe el incidente con el mayor detalle posible..."
+          rows="5"
+          required></textarea>
+      </div>
+      <div class="incident-form-actions">
+        <button
+          type="button"
+          class="incident-btn incident-btn-cancel"
+          id="cancelIncidentBtn">Cancelar</button
+        >
+        <button
+          type="submit"
+          class="incident-btn incident-btn-submit"
+          id="submitIncidentBtn"
+        >
+          <span class="btn-text">Enviar Incidente</span>
+          <span class="btn-loading" style="display: none;">
+            <svg class="spinner" viewBox="0 0 24 24"
+              ><circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="3"
+                fill="none"
+                stroke-dasharray="31.4 31.4"
+                stroke-linecap="round"></circle></svg
+            >
+            Enviando...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Logout Confirmation Modal -->
+<div id="logoutModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Cerrar Sesión</h2>
+      <button class="modal-close" id="closeLogoutModal">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="logout-message">¿Estás seguro que deseas cerrar sesión?</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="cancelLogout">Cancelar</button>
+        <button class="btn-confirm" id="confirmLogout">Cerrar Sesión</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
-.sidebar {
-  width: var(--sidebar-width);
-  background-color: var(--color-module-bg);
-  border-radius: var(--border-radius-xl);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 25px 0;
-  flex-shrink: 0;
-}
+  /* Shared Modal Styles */
+  .modal-overlay,
+  .incident-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 3000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
 
-.sidebar-icon {
-  width: 50px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: var(--transition-fast);
-  border-radius: var(--border-radius-sm);
-}
+  .modal-overlay.active,
+  .incident-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
 
-.sidebar-icon:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
+  .modal-content,
+  .incident-modal {
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--border-radius-lg);
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s ease;
+  }
 
-.sidebar-icon svg {
-  width: 28px;
-  height: 28px;
-  fill: var(--color-text-white);
-}
+  .modal-overlay.active .modal-content,
+  .incident-modal-overlay.active .incident-modal {
+    transform: scale(1) translateY(0);
+  }
 
-/* FAB Container */
-.sidebar-fab-container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  .modal-header,
+  .incident-modal-header {
+    background: linear-gradient(
+      135deg,
+      var(--color-accent-red) 0%,
+      #b91c1c 100%
+    );
+    padding: 20px 25px;
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-.sidebar-fab {
-  position: relative;
-  z-index: 10;
-  transition: var(--transition-normal);
-}
+  .modal-title,
+  .incident-modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+  }
 
-.sidebar-fab.active {
-  background-color: var(--color-gold);
-  transform: rotate(45deg);
-}
+  .modal-close,
+  .incident-modal-close {
+    width: 32px;
+    height: 32px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition-fast);
+  }
 
-.sidebar-fab.active svg {
-  fill: var(--color-bg-primary);
-}
+  .modal-close:hover,
+  .incident-modal-close:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+  }
 
-.sidebar-fab-options {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding-bottom: 15px;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: all var(--transition-normal);
-}
+  .modal-close svg,
+  .modal-close i,
+  .incident-modal-close svg {
+    width: 18px;
+    height: 18px;
+    fill: white;
+    color: white;
+    font-size: 18px;
+  }
 
-.sidebar-fab-container.active .sidebar-fab-options {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
+  .modal-body,
+  .incident-modal-form {
+    padding: 25px;
+  }
 
-.sidebar-fab-option {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background-color: var(--color-accent-red);
-  border: none;
-  border-radius: var(--border-radius-md);
-  padding: 12px 16px;
-  cursor: pointer;
-  white-space: nowrap;
-  color: var(--color-text-white);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  transform: translateY(20px) scale(0.8);
-  opacity: 0;
-  transition: all var(--transition-normal);
-}
+  .modal-actions,
+  .incident-form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 25px;
+  }
 
-.sidebar-fab-container.active .sidebar-fab-option {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-}
+  .btn-cancel,
+  .incident-btn-cancel {
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-light);
+  }
 
-.sidebar-fab-option:hover {
-  background-color: #b91c1c;
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-}
+  .btn-cancel:hover,
+  .incident-btn-cancel:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
 
-.sidebar-fab-option svg {
-  width: 20px;
-  height: 20px;
-  fill: var(--color-text-white);
-  flex-shrink: 0;
-}
+  .btn-confirm,
+  .incident-btn-submit {
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--color-gold);
+    color: var(--color-bg-primary);
+  }
 
-/* Icon Only FAB */
-.sidebar-fab-icon-only {
-  padding: 14px;
-  border-radius: 50%;
-  width: 52px;
-  height: 52px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
+  .btn-confirm:hover,
+  .incident-btn-submit:hover {
+    background-color: #d4a93c;
+  }
 
-.sidebar-fab-icon-only svg {
-  width: 24px;
-  height: 24px;
-}
-
-.fab-tooltip {
-  position: absolute;
-  left: calc(100% + 12px);
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(10, 23, 68, 0.95);
-  backdrop-filter: blur(10px);
-  color: var(--color-text-white);
-  padding: 10px 16px;
-  border-radius: var(--border-radius-sm);
-  font-size: 13px;
-  font-weight: 500;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: all var(--transition-fast);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(201, 162, 39, 0.3);
-}
-
-.sidebar-fab-icon-only:hover .fab-tooltip {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Main Alert */
-.main-alert-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 400px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
   .sidebar {
-    width: 60px;
-    padding: 20px 0;
+    width: var(--sidebar-width);
+    background-color: var(--color-module-bg);
+    border-radius: var(--border-radius-xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 0;
+    flex-shrink: 0;
   }
 
   .sidebar-icon {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    border-radius: var(--border-radius-sm);
+  }
+
+  .sidebar-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   .sidebar-icon svg {
-    width: 22px;
-    height: 22px;
-  }
-}
-
-@media (max-width: 576px) {
-  .sidebar {
-    width: 100%;
-    flex-direction: row;
-    border-radius: var(--border-radius-md);
-    padding: 10px 20px;
-    order: 2;
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    z-index: 100;
-    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+    width: 28px;
+    height: 28px;
+    fill: var(--color-text-white);
   }
 
+  /* FAB Container */
   .sidebar-fab-container {
-    flex-direction: row;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sidebar-fab {
+    position: relative;
+    z-index: 10;
+    transition: var(--transition-normal);
+  }
+
+  .sidebar-fab.active {
+    background-color: var(--color-gold);
+    transform: rotate(45deg);
+  }
+
+  .sidebar-fab.active svg {
+    fill: var(--color-bg-primary);
   }
 
   .sidebar-fab-options {
-    bottom: auto;
-    left: auto;
-    right: 100%;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 15px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all var(--transition-normal);
+  }
+
+  .sidebar-fab-container.active .sidebar-fab-options {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .sidebar-fab-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--color-accent-red);
+    border: none;
+    border-radius: var(--border-radius-md);
+    padding: 12px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    color: var(--color-text-white);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transform: translateY(20px) scale(0.8);
+    opacity: 0;
+    transition: all var(--transition-normal);
+  }
+
+  .sidebar-fab-container.active .sidebar-fab-option {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  .sidebar-fab-option:hover {
+    background-color: #b91c1c;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .sidebar-fab-option svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-text-white);
+    flex-shrink: 0;
+  }
+
+  /* Icon Only FAB */
+  .sidebar-fab-icon-only {
+    padding: 14px;
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .sidebar-fab-icon-only svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .fab-tooltip {
+    position: absolute;
+    left: calc(100% + 12px);
     top: 50%;
     transform: translateY(-50%);
-    flex-direction: row;
-    padding-bottom: 0;
-    padding-right: 15px;
+    background: rgba(10, 23, 68, 0.95);
+    backdrop-filter: blur(10px);
+    color: var(--color-text-white);
+    padding: 10px 16px;
+    border-radius: var(--border-radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all var(--transition-fast);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(201, 162, 39, 0.3);
   }
-}
+
+  .sidebar-fab-icon-only:hover .fab-tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Main Alert */
+  .main-alert-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+  }
+
+  /* Incident Modal Specifics (some reused above) */
+
+  .incident-form-group {
+    margin-bottom: 20px;
+  }
+
+  .incident-form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-light);
+    margin-bottom: 8px;
+  }
+
+  .incident-form-input,
+  .incident-form-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--color-text-white);
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius-md);
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  .incident-form-input:focus,
+  .incident-form-textarea:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .incident-form-input::placeholder,
+  .incident-form-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .incident-form-textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .incident-btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .incident-btn-submit .spinner {
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Logout Message */
+  .logout-message {
+    color: var(--color-text-primary);
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 60px;
+      padding: 20px 0;
+    }
+
+    .sidebar-icon {
+      width: 40px;
+      height: 40px;
+    }
+
+    .sidebar-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .sidebar {
+      width: 100%;
+      flex-direction: row;
+      border-radius: var(--border-radius-md);
+      padding: 10px 20px;
+      order: 2;
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      z-index: 100;
+      box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar-fab-container {
+      flex-direction: row;
+    }
+
+    .sidebar-fab-options {
+      bottom: auto;
+      left: auto;
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      flex-direction: row;
+      padding-bottom: 0;
+      padding-right: 15px;
+    }
+  }
 </style>
 
-<script>
-// FAB Toggle
-function initSidebarFab() {
-  const fab = document.getElementById('sidebarFab');
-  const fabContainer = document.querySelector('.sidebar-fab-container');
-  const ticketBtn = document.getElementById('ticketBtn');
+<script is:inline>
+  // FAB Toggle and Incident Modal
+  function initSidebarFab() {
+    var fab = document.getElementById("sidebarFab");
+    var fabContainer = document.querySelector(".sidebar-fab-container");
+    var ticketBtn = document.getElementById("ticketBtn");
+    var incidentOverlay = document.getElementById("incidentModalOverlay");
+    var closeIncidentBtn = document.getElementById("closeIncidentModal");
+    var cancelIncidentBtn = document.getElementById("cancelIncidentBtn");
+    var incidentForm = document.getElementById("incidentForm");
 
-  if (fab && fabContainer) {
-    fab.addEventListener('click', (e) => {
-      e.stopPropagation();
-      fabContainer.classList.toggle('active');
-      fab.classList.toggle('active');
+    // Logout Modal elements
+    var logoutFabBtn = document.getElementById("logoutFabBtn");
+    var logoutModal = document.getElementById("logoutModal");
+    var closeLogoutModal = document.getElementById("closeLogoutModal");
+    var cancelLogout = document.getElementById("cancelLogout");
+    var confirmLogout = document.getElementById("confirmLogout");
+
+    if (fab && fabContainer) {
+      fab.addEventListener("click", function (e) {
+        e.stopPropagation();
+        fabContainer.classList.toggle("active");
+        fab.classList.toggle("active");
+      });
+    }
+
+    if (ticketBtn) {
+      ticketBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        closeSidebarFab();
+        openIncidentModal();
+      });
+    }
+
+    if (closeIncidentBtn) {
+      closeIncidentBtn.addEventListener("click", closeIncidentModal);
+    }
+
+    if (cancelIncidentBtn) {
+      cancelIncidentBtn.addEventListener("click", closeIncidentModal);
+    }
+
+    if (incidentOverlay) {
+      incidentOverlay.addEventListener("click", function (e) {
+        if (e.target === incidentOverlay) {
+          closeIncidentModal();
+        }
+      });
+    }
+
+    if (incidentForm) {
+      incidentForm.addEventListener("submit", handleIncidentSubmit);
+    }
+
+    // Logout Modal Logic
+    function openLogoutModal() {
+      if (logoutModal) {
+        logoutModal.classList.add("active");
+        // Close FAB menu if open
+        closeSidebarFab();
+      }
+    }
+
+    function closeLogoutModalFunc() {
+      if (logoutModal) logoutModal.classList.remove("active");
+    }
+
+    if (logoutFabBtn) {
+      logoutFabBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openLogoutModal();
+      });
+    }
+
+    if (closeLogoutModal) {
+      closeLogoutModal.addEventListener("click", closeLogoutModalFunc);
+    }
+
+    if (cancelLogout) {
+      cancelLogout.addEventListener("click", closeLogoutModalFunc);
+    }
+
+    if (confirmLogout) {
+      confirmLogout.addEventListener("click", () => {
+        // Call global logout function if available, or redirect
+        if (typeof window.logout === "function") {
+          window.logout();
+        } else {
+          // Fallback if window.logout is not defined
+          console.warn(
+            "window.logout function not found, redirecting to login...",
+          );
+          window.location.href = "/login";
+        }
+      });
+    }
+
+    // Close FAB when clicking outside
+    document.addEventListener("click", function (e) {
+      var target = e.target;
+      if (fabContainer && !fabContainer.contains(target)) {
+        closeSidebarFab();
+      }
+      // Close logout modal on outside click
+      if (logoutModal && e.target === logoutModal) {
+        closeLogoutModalFunc();
+      }
+    });
+
+    // Close FAB and Modal on Escape
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        closeSidebarFab();
+        closeIncidentModal();
+        closeLogoutModalFunc(); // Close logout modal on escape
+      }
     });
   }
 
-  if (ticketBtn) {
-    ticketBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeSidebarFab();
-      showTicketAlert();
-    });
+  function closeSidebarFab() {
+    var fabContainer = document.querySelector(".sidebar-fab-container");
+    var fab = document.getElementById("sidebarFab");
+    if (fabContainer) fabContainer.classList.remove("active");
+    if (fab) fab.classList.remove("active");
   }
 
-  // Close FAB when clicking outside
-  document.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement;
-    if (fabContainer && !fabContainer.contains(target)) {
-      closeSidebarFab();
+  function openIncidentModal() {
+    var overlay = document.getElementById("incidentModalOverlay");
+    if (overlay) {
+      overlay.classList.add("active");
+      var titleInput = document.getElementById("incidentTitle");
+      if (titleInput) titleInput.focus();
     }
-  });
-
-  // Close FAB on Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeSidebarFab();
-    }
-  });
-}
-
-function closeSidebarFab() {
-  const fabContainer = document.querySelector('.sidebar-fab-container');
-  const fab = document.getElementById('sidebarFab');
-  if (fabContainer) fabContainer.classList.remove('active');
-  if (fab) fab.classList.remove('active');
-}
-
-function showTicketAlert() {
-  let alertContainer = document.getElementById('mainAlertContainer');
-  if (!alertContainer) {
-    alertContainer = document.createElement('div');
-    alertContainer.id = 'mainAlertContainer';
-    alertContainer.className = 'main-alert-container';
-    document.body.appendChild(alertContainer);
   }
 
-  const alertId = Date.now();
-  const alert = document.createElement('div');
-  alert.className = 'main-alert main-alert-success';
-  alert.setAttribute('data-alert-id', alertId.toString());
-  alert.innerHTML = `
-    <div class="main-alert-icon">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-    </div>
-    <div class="main-alert-content">
-      <div class="main-alert-title">Incidente Registrado</div>
-      <div class="main-alert-message">Un administrador se pondrá en contacto contigo pronto.</div>
-    </div>
-    <button class="main-alert-close" onclick="this.parentElement.remove()">
-      <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-    </button>
-  `;
+  function closeIncidentModal() {
+    var overlay = document.getElementById("incidentModalOverlay");
+    var form = document.getElementById("incidentForm");
+    if (overlay) overlay.classList.remove("active");
+    if (form) form.reset();
+  }
 
-  alertContainer.appendChild(alert);
+  function handleIncidentSubmit(e) {
+    e.preventDefault();
 
-  setTimeout(() => {
-    alert.classList.add('hiding');
-    setTimeout(() => alert.remove(), 300);
-  }, 5000);
-}
+    var titleInput = document.getElementById("incidentTitle");
+    var descInput = document.getElementById("incidentDescription");
+    var submitBtn = document.getElementById("submitIncidentBtn");
 
-document.addEventListener('DOMContentLoaded', initSidebarFab);
+    var title = titleInput ? titleInput.value.trim() : "";
+    var description = descInput ? descInput.value.trim() : "";
+
+    if (!title || !description) {
+      showIncidentAlert(
+        "error",
+        "Campos requeridos",
+        "Por favor completa todos los campos.",
+      );
+      return;
+    }
+
+    // Show loading state
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      var btnText = submitBtn.querySelector(".btn-text");
+      var btnLoading = submitBtn.querySelector(".btn-loading");
+      if (btnText) btnText.style.display = "none";
+      if (btnLoading) btnLoading.style.display = "flex";
+    }
+
+    // Get session data for the request
+    var session = getSessionData();
+    var accessToken = session ? session.access_token : null;
+    var companyId =
+      session && session.user
+        ? session.user.company_id ||
+          (session.user.company && session.user.company.id)
+        : null;
+
+    // Send to backend via GraphQL
+    // NOTE: The backend needs to implement the createIncident mutation
+    // Expected mutation: createIncident(title: String!, description: String!, companyId: ID!): Incident
+    fetch("/api/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken ? "Bearer " + accessToken : "",
+      },
+      body: JSON.stringify({
+        query:
+          "mutation CreateIncident($title: String!, $description: String!, $companyId: ID!) { createIncident(title: $title, description: $description, companyId: $companyId) { id title description status created_at } }",
+        variables: {
+          title: title,
+          description: description,
+          companyId: companyId || "1",
+        },
+      }),
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        // Reset button state
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          var btnText = submitBtn.querySelector(".btn-text");
+          var btnLoading = submitBtn.querySelector(".btn-loading");
+          if (btnText) btnText.style.display = "inline";
+          if (btnLoading) btnLoading.style.display = "none";
+        }
+
+        if (data.errors) {
+          // If the mutation doesn't exist yet, show info message
+          console.warn("Backend mutation not available:", data.errors);
+          closeIncidentModal();
+          showIncidentAlert(
+            "info",
+            "Funcionalidad pendiente",
+            'El registro de incidentes se habilitará próximamente. Tu solicitud: "' +
+              title +
+              '"',
+          );
+        } else {
+          closeIncidentModal();
+          showIncidentAlert(
+            "success",
+            "Incidente Registrado",
+            "Tu incidente ha sido enviado. Un administrador se pondrá en contacto contigo pronto.",
+          );
+        }
+      })
+      .catch(function (error) {
+        console.error("Error submitting incident:", error);
+        // Reset button state
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          var btnText = submitBtn.querySelector(".btn-text");
+          var btnLoading = submitBtn.querySelector(".btn-loading");
+          if (btnText) btnText.style.display = "inline";
+          if (btnLoading) btnLoading.style.display = "none";
+        }
+        closeIncidentModal();
+        showIncidentAlert(
+          "info",
+          "Funcionalidad pendiente",
+          "El registro de incidentes se habilitará próximamente.",
+        );
+      });
+  }
+
+  function getSessionData() {
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      if (cookie.indexOf("session=") === 0) {
+        try {
+          var value = cookie.substring(8);
+          return JSON.parse(decodeURIComponent(value));
+        } catch (e) {
+          return null;
+        }
+      }
+    }
+    return null;
+  }
+
+  function showIncidentAlert(type, title, message) {
+    var alertContainer = document.getElementById("mainAlertContainer");
+    if (!alertContainer) {
+      alertContainer = document.createElement("div");
+      alertContainer.id = "mainAlertContainer";
+      alertContainer.className = "main-alert-container";
+      document.body.appendChild(alertContainer);
+    }
+
+    var alertClass = "main-alert main-alert-" + type;
+    var iconPath =
+      type === "success"
+        ? "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+        : type === "error"
+          ? "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+          : "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z";
+
+    var alert = document.createElement("div");
+    alert.className = alertClass;
+    alert.innerHTML =
+      '<div class="main-alert-icon"><svg viewBox="0 0 24 24"><path d="' +
+      iconPath +
+      '"/></svg></div>' +
+      '<div class="main-alert-content"><div class="main-alert-title">' +
+      title +
+      "</div>" +
+      '<div class="main-alert-message">' +
+      message +
+      "</div></div>" +
+      '<button class="main-alert-close" onclick="this.parentElement.remove()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>';
+
+    alertContainer.appendChild(alert);
+
+    setTimeout(function () {
+      alert.classList.add("hiding");
+      setTimeout(function () {
+        alert.remove();
+      }, 300);
+    }, 6000);
+  }
+
+  document.addEventListener("DOMContentLoaded", initSidebarFab);
 </script>
