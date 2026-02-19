@@ -1,0 +1,801 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// This page is public - no auth required
+---
+
+<BaseLayout title="Guia - Configurar Pagina de Inicio">
+  <div class="guide-wrapper">
+    <header class="guide-header">
+      <a href="/" class="guide-back">
+        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path></svg>
+        Volver al inicio
+      </a>
+      <h1 class="guide-title">Configurar Pagina de Inicio del Navegador</h1>
+      <p class="guide-subtitle">Sigue estos pasos para que el portal de tu empresa se abra automaticamente cada vez que inicies tu navegador.</p>
+    </header>
+
+    <main class="guide-content">
+      <!-- Google Chrome -->
+      <section class="browser-section" id="chrome">
+        <div class="browser-header">
+          <div class="browser-icon chrome-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#4285F4"/><circle cx="12" cy="12" r="4.5" fill="white"/><path d="M12 7.5c2.48 0 4.5 2.02 4.5 4.5h-9c0-2.48 2.02-4.5 4.5-4.5z" fill="#EA4335"/><path d="M7.5 12c0-1.24.5-2.36 1.32-3.18L5.04 3.54C3.15 5.74 2 8.73 2 12h5.5z" fill="#FBBC05"/><path d="M16.5 12c0 1.24-.5 2.36-1.32 3.18l3.78 5.28C20.85 18.26 22 15.27 22 12h-5.5z" fill="#34A853"/></svg>
+          </div>
+          <h2>Google Chrome</h2>
+        </div>
+        <div class="steps-container">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3>Abrir Configuracion</h3>
+              <p>Haz clic en los <strong>tres puntos verticales</strong> en la esquina superior derecha del navegador, luego selecciona <strong>"Configuracion"</strong>.</p>
+              <div class="step-visual">
+                <div class="mock-browser">
+                  <div class="mock-toolbar">
+                    <div class="mock-dots"><span></span><span></span><span></span></div>
+                    <div class="mock-url-bar">chrome://settings</div>
+                    <div class="mock-menu-btn">
+                      <span></span><span></span><span></span>
+                    </div>
+                  </div>
+                  <div class="mock-dropdown">
+                    <div class="mock-menu-item">Nueva pestana</div>
+                    <div class="mock-menu-item">Nueva ventana</div>
+                    <div class="mock-menu-item mock-highlighted">Configuracion</div>
+                  </div>
+                </div>
+              </div>
+              <div class="shortcut-tip">
+                <svg viewBox="0 0 24 24"><path d="M15 7.5V2H9v5.5l3 3 3-3zM7.5 9H2v6h5.5l3-3-3-3zM9 16.5V22h6v-5.5l-3-3-3 3zM16.5 9l-3 3 3 3H22V9h-5.5z"></path></svg>
+                <span>Atajo rapido: Escribe <code>chrome://settings</code> en la barra de direcciones</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3>Ir a "Al abrir el navegador"</h3>
+              <p>En el menu lateral izquierdo, haz clic en <strong>"Al abrir el navegador"</strong>. Si no lo ves, desplazate hacia abajo en la pagina de configuracion.</p>
+              <div class="step-visual">
+                <div class="mock-settings">
+                  <div class="mock-sidebar">
+                    <div class="mock-sidebar-item">Apariencia</div>
+                    <div class="mock-sidebar-item">Motor de busqueda</div>
+                    <div class="mock-sidebar-item mock-highlighted">Al abrir el navegador</div>
+                    <div class="mock-sidebar-item">Privacidad</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3>Seleccionar "Abrir una pagina especifica"</h3>
+              <p>Selecciona la opcion <strong>"Abrir una pagina especifica o un conjunto de paginas"</strong>, luego haz clic en <strong>"Anadir una pagina nueva"</strong>.</p>
+              <div class="step-visual">
+                <div class="mock-radio-group">
+                  <div class="mock-radio"><span class="radio-empty"></span> Abrir pagina de nueva pestana</div>
+                  <div class="mock-radio"><span class="radio-empty"></span> Continuar donde lo dejaste</div>
+                  <div class="mock-radio mock-highlighted"><span class="radio-filled"></span> Abrir una pagina especifica o un conjunto de paginas</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h3>Ingresar la URL del portal</h3>
+              <p>En el campo de texto, escribe o pega la URL del portal de la empresa y haz clic en <strong>"Anadir"</strong>.</p>
+              <div class="url-box" id="urlBox">
+                <code id="siteUrl">https://home-page-ui.vercel.app</code>
+                <button class="copy-btn" id="copyUrlBtn" type="button">
+                  <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg>
+                  Copiar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4.09 14.1 9 19 21 7l-1.41-1.41z"></path></svg></div>
+            <div class="step-content">
+              <h3>Listo</h3>
+              <p>Cierra y vuelve a abrir Chrome. El portal de la empresa aparecera automaticamente.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Microsoft Edge -->
+      <section class="browser-section" id="edge">
+        <div class="browser-header">
+          <div class="browser-icon edge-icon">
+            <svg viewBox="0 0 24 24"><path d="M21.86 17.86c-.26.15-.53.29-.82.4a7.05 7.05 0 01-2.74.55c-3.43 0-6.4-2.34-6.4-5.35 0-1.4.74-2.64 1.84-3.44a5.12 5.12 0 00-4.6 5.07c0 3.54 3.41 5.91 6.7 5.91 1.6 0 3.97-.77 5.17-1.84.41-.37.71-.82.85-1.3z" fill="#0078D4"/><path d="M12 2C6.48 2 2 6.48 2 12c0 2.5.92 4.78 2.44 6.53C6.17 16.7 9 15.18 12 15.18c1.62 0 3.04.6 4.16 1.52.54-.83.84-1.83.84-2.88 0-3.31-2.69-6-6-6-1.66 0-3.16.67-4.24 1.76A7.99 7.99 0 0112 4c4.42 0 8 3.58 8 8 0 .89-.15 1.74-.42 2.54.97-.56 1.72-1.44 2.16-2.46.14-.34.26-.72.26-1.08C22 6.48 17.52 2 12 2z" fill="#0078D4"/></svg>
+          </div>
+          <h2>Microsoft Edge</h2>
+        </div>
+        <div class="steps-container">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3>Abrir Configuracion</h3>
+              <p>Haz clic en los <strong>tres puntos horizontales</strong> (...) en la esquina superior derecha, luego selecciona <strong>"Configuracion"</strong>.</p>
+              <div class="shortcut-tip">
+                <svg viewBox="0 0 24 24"><path d="M15 7.5V2H9v5.5l3 3 3-3zM7.5 9H2v6h5.5l3-3-3-3zM9 16.5V22h6v-5.5l-3-3-3 3zM16.5 9l-3 3 3 3H22V9h-5.5z"></path></svg>
+                <span>Atajo rapido: Escribe <code>edge://settings/onStartup</code> en la barra de direcciones</span>
+              </div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3>Ir a "Inicio, pagina principal y pestanas nuevas"</h3>
+              <p>En el menu lateral, selecciona <strong>"Inicio, pagina principal y pestanas nuevas"</strong>.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3>Seleccionar "Abrir estas paginas"</h3>
+              <p>En la seccion <strong>"Cuando se inicia Edge"</strong>, selecciona <strong>"Abrir estas paginas"</strong> y haz clic en <strong>"Agregar una pagina nueva"</strong>.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h3>Ingresar la URL</h3>
+              <p>Pega la URL del portal y haz clic en <strong>"Agregar"</strong>.</p>
+              <div class="url-box">
+                <code>https://home-page-ui.vercel.app</code>
+                <button class="copy-btn copy-url-btn" type="button">
+                  <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg>
+                  Copiar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4.09 14.1 9 19 21 7l-1.41-1.41z"></path></svg></div>
+            <div class="step-content">
+              <h3>Listo</h3>
+              <p>Reinicia Edge y el portal se abrira automaticamente.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mozilla Firefox -->
+      <section class="browser-section" id="firefox">
+        <div class="browser-header">
+          <div class="browser-icon firefox-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#FF6611"/><path d="M12 4c4.42 0 8 3.58 8 8s-3.58 8-8 8-8-3.58-8-8 3.58-8 8-8z" fill="#FF9500"/></svg>
+          </div>
+          <h2>Mozilla Firefox</h2>
+        </div>
+        <div class="steps-container">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3>Abrir Configuracion</h3>
+              <p>Haz clic en el <strong>menu hamburguesa</strong> (tres lineas horizontales) en la esquina superior derecha, luego selecciona <strong>"Ajustes"</strong>.</p>
+              <div class="shortcut-tip">
+                <svg viewBox="0 0 24 24"><path d="M15 7.5V2H9v5.5l3 3 3-3zM7.5 9H2v6h5.5l3-3-3-3zM9 16.5V22h6v-5.5l-3-3-3 3zM16.5 9l-3 3 3 3H22V9h-5.5z"></path></svg>
+                <span>Atajo rapido: Escribe <code>about:preferences#home</code> en la barra de direcciones</span>
+              </div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3>Ir a la seccion "Inicio"</h3>
+              <p>En el panel izquierdo, haz clic en <strong>"Inicio"</strong>.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3>Configurar pagina de inicio</h3>
+              <p>En <strong>"Pagina de inicio y ventanas nuevas"</strong>, selecciona <strong>"URLs personalizadas..."</strong> del menu desplegable.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h3>Ingresar la URL</h3>
+              <p>Pega la URL del portal en el campo que aparece.</p>
+              <div class="url-box">
+                <code>https://home-page-ui.vercel.app</code>
+                <button class="copy-btn copy-url-btn" type="button">
+                  <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg>
+                  Copiar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4.09 14.1 9 19 21 7l-1.41-1.41z"></path></svg></div>
+            <div class="step-content">
+              <h3>Listo</h3>
+              <p>Cierra y vuelve a abrir Firefox. El portal cargara automaticamente.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Safari -->
+      <section class="browser-section" id="safari">
+        <div class="browser-header">
+          <div class="browser-icon safari-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#006CFF"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 13.5l-7 2 2-7 7-2-2 7z" fill="white"/><circle cx="12" cy="12" r="1.5" fill="#006CFF"/></svg>
+          </div>
+          <h2>Safari (Mac)</h2>
+        </div>
+        <div class="steps-container">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3>Abrir Preferencias</h3>
+              <p>En la barra de menu superior, haz clic en <strong>"Safari"</strong> y luego en <strong>"Preferencias..."</strong> (o usa <code>Cmd + ,</code>).</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3>Ir a la pestana "General"</h3>
+              <p>En la ventana de preferencias, haz clic en la pestana <strong>"General"</strong>.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3>Configurar pagina de inicio</h3>
+              <p>En el campo <strong>"Pagina de inicio"</strong>, borra el contenido actual y pega la URL del portal.</p>
+              <div class="url-box">
+                <code>https://home-page-ui.vercel.app</code>
+                <button class="copy-btn copy-url-btn" type="button">
+                  <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg>
+                  Copiar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h3>Configurar "Abrir ventanas nuevas con"</h3>
+              <p>Asegurate que la opcion <strong>"Las ventanas nuevas se abren con"</strong> este configurada en <strong>"Pagina de inicio"</strong>.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4.09 14.1 9 19 21 7l-1.41-1.41z"></path></svg></div>
+            <div class="step-content">
+              <h3>Listo</h3>
+              <p>Cierra las preferencias. La proxima vez que abras Safari, el portal se cargara.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GPO Section for IT Admins -->
+      <section class="browser-section" id="gpo">
+        <div class="browser-header">
+          <div class="browser-icon gpo-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" fill="#c9a227"></path></svg>
+          </div>
+          <h2>Para Administradores de TI (GPO / MDM)</h2>
+        </div>
+        <div class="steps-container">
+          <div class="step">
+            <div class="step-number"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path></svg></div>
+            <div class="step-content">
+              <h3>Despliegue masivo con Politicas de Grupo (GPO)</h3>
+              <p>Si necesitas configurar la pagina de inicio para todos los equipos de la empresa de forma automatica, puedes usar <strong>Politicas de Grupo de Windows (GPO)</strong> o herramientas de administracion de dispositivos (MDM).</p>
+              <div class="gpo-details">
+                <h4>Google Chrome - via GPO:</h4>
+                <ol>
+                  <li>Descarga las plantillas ADMX de Chrome desde el sitio de Google</li>
+                  <li>Abre <code>gpedit.msc</code> o <code>Administracion de directivas de grupo</code></li>
+                  <li>Navega a: <code>Configuracion del equipo > Plantillas administrativas > Google Chrome</code></li>
+                  <li>Habilita <strong>"Accion al iniciar"</strong> y configura el valor en <code>4</code> (Abrir una lista de URLs)</li>
+                  <li>Habilita <strong>"URLs que se abren en el inicio"</strong> y agrega la URL del portal</li>
+                </ol>
+
+                <h4>Microsoft Edge - via GPO:</h4>
+                <ol>
+                  <li>Descarga las plantillas ADMX de Edge desde el sitio de Microsoft</li>
+                  <li>Navega a: <code>Configuracion del equipo > Plantillas administrativas > Microsoft Edge > Inicio</code></li>
+                  <li>Configura <strong>"Accion al iniciar"</strong> en <code>Abrir una lista de URLs</code></li>
+                  <li>En <strong>"Sitios para abrir cuando se inicie el explorador"</strong>, agrega la URL</li>
+                </ol>
+
+                <h4>Registry (alternativa rapida):</h4>
+                <div class="code-block">
+                  <code>
+                    REG ADD "HKLM\SOFTWARE\Policies\Google\Chrome\RestoreOnStartupURLs" /v "1" /t REG_SZ /d "https://home-page-ui.vercel.app" /f<br>
+                    REG ADD "HKLM\SOFTWARE\Policies\Google\Chrome" /v "RestoreOnStartup" /t REG_DWORD /d 4 /f
+                  </code>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="guide-footer">
+      <p>Si tienes dudas, contacta al departamento de TI de tu empresa.</p>
+    </footer>
+  </div>
+</BaseLayout>
+
+<style>
+  .guide-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    min-height: 100vh;
+  }
+
+  .guide-header {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  .guide-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-gold);
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 20px;
+    transition: opacity 0.2s ease;
+  }
+
+  .guide-back:hover {
+    opacity: 0.8;
+  }
+
+  .guide-back svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--color-gold);
+  }
+
+  .guide-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .guide-subtitle {
+    font-size: 1rem;
+    color: var(--color-text-light);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Browser Sections */
+  .browser-section {
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .browser-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 25px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .browser-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+
+  .browser-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .browser-header h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: white;
+  }
+
+  /* Steps */
+  .steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .step-number {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    background: linear-gradient(135deg, var(--color-gold) 0%, #b8911f 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+    margin-top: 2px;
+  }
+
+  .step-number svg {
+    width: 20px;
+    height: 20px;
+    fill: white;
+  }
+
+  .step-content {
+    flex: 1;
+  }
+
+  .step-content h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 6px;
+  }
+
+  .step-content p {
+    font-size: 14px;
+    color: var(--color-text-light);
+    line-height: 1.6;
+  }
+
+  .step-content code {
+    background-color: rgba(201, 162, 39, 0.15);
+    color: var(--color-gold);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* Visual mockups */
+  .step-visual {
+    margin-top: 14px;
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+  }
+
+  .mock-browser {
+    background: #1a1a2e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .mock-toolbar {
+    background: #252540;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mock-dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  .mock-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .mock-dots span:first-child { background: #ff5f57; }
+  .mock-dots span:nth-child(2) { background: #febc2e; }
+  .mock-dots span:nth-child(3) { background: #28c840; }
+
+  .mock-url-bar {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: monospace;
+  }
+
+  .mock-menu-btn {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 4px;
+    cursor: pointer;
+  }
+
+  .mock-menu-btn span {
+    width: 3px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+  }
+
+  .mock-dropdown {
+    padding: 6px 0;
+  }
+
+  .mock-menu-item {
+    padding: 6px 16px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .mock-menu-item.mock-highlighted {
+    background: rgba(201, 162, 39, 0.2);
+    color: var(--color-gold);
+    font-weight: 600;
+  }
+
+  .mock-settings {
+    background: #1a1a2e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .mock-sidebar {
+    padding: 8px 0;
+  }
+
+  .mock-sidebar-item {
+    padding: 8px 16px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .mock-sidebar-item.mock-highlighted {
+    background: rgba(201, 162, 39, 0.2);
+    color: var(--color-gold);
+    font-weight: 600;
+    border-left: 3px solid var(--color-gold);
+  }
+
+  .mock-radio-group {
+    background: #1a1a2e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+
+  .mock-radio {
+    padding: 6px 0;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mock-radio.mock-highlighted {
+    color: var(--color-gold);
+    font-weight: 600;
+  }
+
+  .radio-empty, .radio-filled {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  .radio-filled {
+    border-color: var(--color-gold);
+    background: var(--color-gold);
+    box-shadow: inset 0 0 0 3px #1a1a2e;
+  }
+
+  /* Shortcut tip */
+  .shortcut-tip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: rgba(201, 162, 39, 0.08);
+    border-left: 3px solid var(--color-gold);
+    border-radius: 0 6px 6px 0;
+    font-size: 12px;
+    color: var(--color-text-light);
+  }
+
+  .shortcut-tip svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--color-gold);
+    flex-shrink: 0;
+  }
+
+  /* URL copy box */
+  .url-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 10px 14px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(201, 162, 39, 0.3);
+    border-radius: 8px;
+  }
+
+  .url-box code {
+    flex: 1;
+    font-size: 13px;
+    color: var(--color-gold);
+    word-break: break-all;
+    background: none;
+    padding: 0;
+  }
+
+  .copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--color-gold);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .copy-btn:hover {
+    filter: brightness(1.1);
+  }
+
+  .copy-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: white;
+  }
+
+  /* GPO Section */
+  .gpo-details {
+    margin-top: 16px;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+  }
+
+  .gpo-details h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-gold);
+    margin-bottom: 10px;
+    margin-top: 16px;
+  }
+
+  .gpo-details h4:first-child {
+    margin-top: 0;
+  }
+
+  .gpo-details ol {
+    padding-left: 20px;
+    margin-bottom: 6px;
+  }
+
+  .gpo-details li {
+    font-size: 13px;
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin-bottom: 4px;
+  }
+
+  .code-block {
+    margin-top: 10px;
+    padding: 14px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 6px;
+    overflow-x: auto;
+  }
+
+  .code-block code {
+    font-size: 11px;
+    color: #a3e635;
+    font-family: 'Courier New', monospace;
+    line-height: 1.8;
+    background: none;
+    padding: 0;
+  }
+
+  /* Footer */
+  .guide-footer {
+    text-align: center;
+    padding: 30px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 20px;
+  }
+
+  .guide-footer p {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .guide-wrapper {
+      padding: 24px 16px;
+    }
+
+    .guide-title {
+      font-size: 1.5rem;
+    }
+
+    .browser-section {
+      padding: 20px;
+    }
+
+    .step {
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .guide-title {
+      font-size: 1.25rem;
+    }
+
+    .url-box {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function() {
+    var siteUrl = 'https://home-page-ui.vercel.app';
+
+    document.querySelectorAll('.copy-btn, .copy-url-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        navigator.clipboard.writeText(siteUrl).then(function() {
+          var originalText = btn.innerHTML;
+          btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:white"><path d="M9 16.2l-3.5-3.5L4.09 14.1 9 19 21 7l-1.41-1.41z"></path></svg> Copiado';
+          btn.style.background = '#10b981';
+          setTimeout(function() {
+            btn.innerHTML = originalText;
+            btn.style.background = '';
+          }, 2000);
+        });
+      });
+    });
+  });
+</script>
