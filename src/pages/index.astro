@@ -263,12 +263,15 @@ const events = (dashboardData?.calendarEvents || []).map((e: any) => {
   const endTime = formatTime12h(e.end_time);
   const timeRange = (startTime && endTime) ? `${startTime} - ${endTime}` : (startTime || '');
   
-  return { 
-    day, 
-    title: e.title, 
-    content: e.description || '', 
-    time: timeRange, 
-    color: e.color || null 
+  return {
+    day,
+    title: e.title,
+    content: e.description || '',
+    time: timeRange,
+    color: e.color || null,
+    event_date: e.event_date || null,
+    start_time: e.start_time || null,
+    end_time: e.end_time || null,
   };
 });
 
