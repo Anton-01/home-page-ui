@@ -17,43 +17,24 @@ interface Props {
 
 const { title, companyConfig } = Astro.props;
 
-// Build dynamic CSS override only when companyConfig is present
-const dynamicVars = companyConfig
-  ? [
-      companyConfig.background_color
-        ? `--color-bg-primary: ${companyConfig.background_color};`
-        : "",
-      companyConfig.secondary_color
-        ? `--color-bg-secondary: ${companyConfig.secondary_color};`
-        : "",
-      companyConfig.module_bg_color
-        ? `--color-module-bg: ${companyConfig.module_bg_color};`
-        : "",
-      companyConfig.module_hover_color
-        ? `--color-module-hover: ${companyConfig.module_hover_color};`
-        : "",
-      companyConfig.accent_color
-        ? `--color-gold: ${companyConfig.accent_color};`
-        : "",
-      companyConfig.text_color
-        ? `--color-text-white: ${companyConfig.text_color};`
-        : "",
-      companyConfig.error_color
-        ? `--color-error: ${companyConfig.error_color};`
-        : "",
-      companyConfig.success_color
-        ? `--color-success: ${companyConfig.success_color};`
-        : "",
-      companyConfig.warning_color
-        ? `--color-accent-orange: ${companyConfig.warning_color};`
-        : "",
-      companyConfig.primary_color
-        ? `--color-accent-red: ${companyConfig.primary_color};`
-        : "",
-    ]
-      .filter(Boolean)
-      .join("\n  ")
-  : "";
+// Build a map of CSS variable overrides from companyConfig
+// These will be applied via an inline script to ensure they always
+// override the compiled CSS bundle (which loads after inline scripts).
+type ColorMap = Record<string, string>;
+const colorOverrides: ColorMap = {};
+if (companyConfig) {
+  if (companyConfig.background_color)   colorOverrides['--color-bg-primary']      = companyConfig.background_color;
+  if (companyConfig.secondary_color)    colorOverrides['--color-bg-secondary']    = companyConfig.secondary_color;
+  if (companyConfig.module_bg_color)    colorOverrides['--color-module-bg']       = companyConfig.module_bg_color;
+  if (companyConfig.module_hover_color) colorOverrides['--color-module-hover']    = companyConfig.module_hover_color;
+  if (companyConfig.accent_color)       colorOverrides['--color-gold']            = companyConfig.accent_color;
+  if (companyConfig.text_color)         colorOverrides['--color-text-white']      = companyConfig.text_color;
+  if (companyConfig.error_color)        colorOverrides['--color-error']           = companyConfig.error_color;
+  if (companyConfig.success_color)      colorOverrides['--color-success']         = companyConfig.success_color;
+  if (companyConfig.warning_color)      colorOverrides['--color-accent-orange']   = companyConfig.warning_color;
+  if (companyConfig.primary_color)      colorOverrides['--color-accent-red']      = companyConfig.primary_color;
+}
+const hasColorOverrides = Object.keys(colorOverrides).length > 0;
 ---
 
 <!doctype html>
@@ -72,7 +53,17 @@ const dynamicVars = companyConfig
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    {dynamicVars && <style set:html={`:root {\n  ${dynamicVars}\n}`} />}
+    {hasColorOverrides && (
+      <script is:inline define:vars={{ colorOverrides }}>
+        // Apply company brand colors before first paint
+        var root = document.documentElement;
+        for (var prop in colorOverrides) {
+          if (colorOverrides[prop]) {
+            root.style.setProperty(prop, colorOverrides[prop]);
+          }
+        }
+      </script>
+    )}
   </head>
   <body>
     <slot />
