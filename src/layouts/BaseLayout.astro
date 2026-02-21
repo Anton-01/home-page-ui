@@ -1,9 +1,59 @@
 ---
 interface Props {
   title: string;
+  companyConfig?: {
+    primary_color?: string | null;
+    secondary_color?: string | null;
+    accent_color?: string | null;
+    background_color?: string | null;
+    text_color?: string | null;
+    error_color?: string | null;
+    success_color?: string | null;
+    warning_color?: string | null;
+    module_bg_color?: string | null;
+    module_hover_color?: string | null;
+  } | null;
 }
 
-const { title } = Astro.props;
+const { title, companyConfig } = Astro.props;
+
+// Build dynamic CSS override only when companyConfig is present
+const dynamicVars = companyConfig
+  ? [
+      companyConfig.background_color
+        ? `--color-bg-primary: ${companyConfig.background_color};`
+        : "",
+      companyConfig.secondary_color
+        ? `--color-bg-secondary: ${companyConfig.secondary_color};`
+        : "",
+      companyConfig.module_bg_color
+        ? `--color-module-bg: ${companyConfig.module_bg_color};`
+        : "",
+      companyConfig.module_hover_color
+        ? `--color-module-hover: ${companyConfig.module_hover_color};`
+        : "",
+      companyConfig.accent_color
+        ? `--color-gold: ${companyConfig.accent_color};`
+        : "",
+      companyConfig.text_color
+        ? `--color-text-white: ${companyConfig.text_color};`
+        : "",
+      companyConfig.error_color
+        ? `--color-error: ${companyConfig.error_color};`
+        : "",
+      companyConfig.success_color
+        ? `--color-success: ${companyConfig.success_color};`
+        : "",
+      companyConfig.warning_color
+        ? `--color-accent-orange: ${companyConfig.warning_color};`
+        : "",
+      companyConfig.primary_color
+        ? `--color-accent-red: ${companyConfig.primary_color};`
+        : "",
+    ]
+      .filter(Boolean)
+      .join("\n  ")
+  : "";
 ---
 
 <!doctype html>
@@ -22,6 +72,7 @@ const { title } = Astro.props;
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
+    {dynamicVars && <style set:html={`:root {\n  ${dynamicVars}\n}`} />}
   </head>
   <body>
     <slot />
@@ -46,7 +97,7 @@ const { title } = Astro.props;
     --color-success: #10b981;
     --color-error: #ef4444;
     --sidebar-width: 80px;
-    --header-height: 80px;
+    --header-height: 110px;
     --border-radius-sm: 8px;
     --border-radius-md: 12px;
     --border-radius-lg: 20px;
